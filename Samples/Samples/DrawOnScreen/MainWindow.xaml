@@ -9,11 +9,10 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
-        Opacity="0.25"
-        Background="LightGray"
+        Opacity="0.15"
         WindowState="Maximized"
         >
     <Grid>
-        
+        <local:MyCanvas x:Name="MyCanvas"></local:MyCanvas>
     </Grid>
 </Window>

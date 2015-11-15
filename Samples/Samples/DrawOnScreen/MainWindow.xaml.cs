@@ -20,41 +20,22 @@ namespace DrawOnScreen
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Point? _startPoint;
-        private Point? _endPoint;
+      
 
         public MainWindow()
         {
             InitializeComponent();
             this.KeyDown += OnKeyDown;
-            this.MouseLeftButtonDown += OnMouseLeftButtonDown;
-            this.MouseLeftButtonUp += OnMouseLeftButtonUp;
-            this.MouseMove += OnMouseMove;
             this.Topmost = true;
         }
 
-        private void OnMouseMove(object sender, MouseEventArgs mouseEventArgs)
+        public override void OnApplyTemplate()
         {
-            _endPoint = mouseEventArgs.GetPosition(this);
-            System.Diagnostics.Debug.WriteLine("OnMouseMove");
-            if (_startPoint.HasValue && _endPoint.HasValue)
-            {
-                this.InvalidateVisual();
-            }
+            base.OnApplyTemplate();
+            MyCanvas.Focus();
+            MyCanvas.Background = Brushes.LightGray;
         }
 
-        private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
-        {
-            _startPoint = mouseButtonEventArgs.GetPosition(this);
-            System.Diagnostics.Debug.WriteLine("OnMouseLeftButtonUp");
-        }
-
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
-        {
-            _startPoint = null;
-            _endPoint = null;
-            System.Diagnostics.Debug.WriteLine("OnMouseLeftButtonDown");
-        }
 
         private void OnKeyDown(object sender, KeyEventArgs keyEventArgs)
         {
@@ -66,16 +47,6 @@ namespace DrawOnScreen
             }
         }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            if (_startPoint.HasValue && _endPoint.HasValue)
-            {
-                drawingContext.DrawRectangle(Brushes.Aqua,new Pen(Brushes.Blue,1),new Rect(_startPoint.Value,_endPoint.Value));
-                System.Diagnostics.Debug.WriteLine("Render");
-                System.Diagnostics.Debug.WriteLine(_startPoint.Value.ToString() +" : " + _endPoint.Value.ToString());
-            }
-            
-        }
+       
     }
 }

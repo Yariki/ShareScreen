@@ -9,3 +9,17 @@ Samples/Samples/DrawOnScreen/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077
 Samples/Samples/DrawOnScreen/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
 /Samples/Samples/DrawOnScreen/obj
 Samples/Samples/DrawOnScreen/bin/Debug/DrawOnScreen.vshost.exe
+/Samples/Samples/DrawOnScreen/bin
+/Output
+/ROutput
+/Source/.vs
+/Source/PluginCore/bin
+
+/Source/PluginCore/obj
+/Source/ShareScreen/bin
+/Source/ShareScreen/obj
+
+/Design/*.ldb
+/Source/PluginCore/*.user
+
+/Source/ShareScreen/*.user
