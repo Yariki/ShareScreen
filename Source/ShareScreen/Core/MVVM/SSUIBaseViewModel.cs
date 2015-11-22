@@ -6,14 +6,21 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics.Contracts;
 using SS.ShareScreen.Interfaces.Core;
 
 namespace SS.ShareScreen.Core.MVVM
 {
-    public class SSUIBaseViewModel<T> : SSBaseViewModel
+    public class SSUIBaseViewModel<T> : SSBaseViewModel , ISSUIViewModel 
         where T : ISSView
     {
-        public T View;
+        private T _view;
+        private ISSUIViewModel _parentViewModel;
+
+        [Import]
+        protected CompositionContainer Container { get; set; }
 
         public SSUIBaseViewModel()
         {
@@ -21,6 +28,52 @@ namespace SS.ShareScreen.Core.MVVM
 
         ~SSUIBaseViewModel()
         {
+        }
+
+        public object View
+        {
+            get
+            {
+                if (_view == null)
+                {
+                    _view = Container.GetExportedValue<T>();
+                    _view.Model = this;
+                }
+                return _view;
+            }
+        }
+
+
+        ///
+        /// <param name="view"></param>
+        public virtual void ShowDialog(ISSView view)
+        {
+            _parentViewModel?.ShowDialog(view);
+        }
+
+        ///
+        /// <param name="view"></param>
+        public virtual void HideDialog(ISSView view)
+        {
+            _parentViewModel?.HideDialog(view);
+        }
+
+        ///
+        /// <param name="parentModel"></param>
+        public virtual void Initialize(ISSUIViewModel parentModel)
+        {
+            _parentViewModel = parentModel;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && !Disposed)
+            {
+                _parentViewModel = null;
+                _view.Model = null;
+                _view = default(T);
+            }
+            base.Dispose(disposing);
         }
     }//end SSUIBaseViewModel
 }//end namespace MVVM

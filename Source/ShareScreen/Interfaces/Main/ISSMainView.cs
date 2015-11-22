@@ -12,5 +12,8 @@ namespace SS.ShareScreen.Interfaces.Main
 {
     public interface ISSMainView : ISSView
     {
+        void ShowDialog(ISSView view);
+
+        void HideDialog(ISSView view);
     }//end ISSMainView
 }//end namespace Main

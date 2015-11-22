@@ -7,6 +7,8 @@
 ///////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Windows;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
@@ -14,16 +16,10 @@ using SS.ShareScreen.Interfaces.System;
 
 namespace SS.ShareScreen.ViewModels
 {
-    public class SSMainViewModel : SSBaseViewModel, ISSMainViewModel
+    [Export(typeof(ISSMainViewModel))]
+    public class SSMainViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainViewModel
     {
-        private Interfaces.System.ISSKeyboardSystem _keyboardSystem;
-        private Interfaces.Main.ISSMainMenuViewModel _menuViewModel;
-        private Interfaces.System.ISSMouseSystem _mouseSystem;
-        private Interfaces.System.ISSPluginSystem _pluginSystem;
         private List<ISSScreenShotViewModel> _screenShotList;
-        private Interfaces.System.ISSScreenshotSystem _screenShotSystem;
-        private Interfaces.Main.ISSMainStatusBarViewModel _statusBarViewModel;
-        public Interfaces.Core.ISSMenuViewModel m_ISSMenuViewModel;
 
         public SSMainViewModel()
         {
@@ -35,89 +31,61 @@ namespace SS.ShareScreen.ViewModels
 
         ///
         /// <param name="disposing"></param>
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
         }
 
         ///
         /// <param name="view"></param>
-        public int HideDialog(ISSView view)
+        public override void HideDialog(ISSView view)
         {
-            return 0;
         }
 
         ///
         /// <param name="parentModel"></param>
-        public void Initialize(ISSUIViewModel parentModel)
+        public override void Initialize(ISSUIViewModel parentModel)
         {
         }
 
+        public void ShowMainWindow()
+        {
+            (View as Window).Show();
+        }
+
+        [Import]
         private ISSKeyboardSystem KeyboardSystem
         {
-            get
-            {
-                return _keyboardSystem;
-            }
-            set
-            {
-                _keyboardSystem = value;
-            }
+            get; set;
         }
 
+        [Import]
         public ISSMainMenuViewModel MenuViewModel
         {
-            get
-            {
-                return _menuViewModel;
-            }
+            get; set;
         }
 
+        [Import]
         private ISSMouseSystem MouseSystem
         {
-            get
-            {
-                return _mouseSystem;
-            }
-            set
-            {
-                _mouseSystem = value;
-            }
+            get; set;
         }
 
+        [Import]
         private ISSPluginSystem PluginSystem
         {
-            get
-            {
-                return _pluginSystem;
-            }
-            set
-            {
-                _pluginSystem = value;
-            }
+            get; set;
         }
 
+        [Import]
         private ISSScreenshotSystem ScreenShotSystem
         {
-            get
-            {
-                return _screenShotSystem;
-            }
-            set
-            {
-                _screenShotSystem = value;
-            }
+            get; set;
         }
 
+        [Import]
         public ISSMainStatusBarViewModel StatusBarViewModel
         {
-            get
-            {
-                return _statusBarViewModel;
-            }
-            set
-            {
-                _statusBarViewModel = value;
-            }
+            get; set;
         }
     }//end SSMainViewModel
 }//end namespace ViewModels

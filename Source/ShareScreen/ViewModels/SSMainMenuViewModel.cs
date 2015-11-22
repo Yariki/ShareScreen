@@ -8,13 +8,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
 
 namespace SS.ShareScreen.ViewModels
 {
-    public class SSMainMenuViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainMenuViewModel
+    [Export(typeof(ISSMainMenuViewModel))]
+    public class SSMainMenuViewModel : SSUIBaseViewModel<ISSMainMenuView>, ISSMainMenuViewModel
     {
         public SSMainMenuViewModel()
         {

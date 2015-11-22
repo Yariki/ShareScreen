@@ -6,12 +6,14 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System.ComponentModel.Composition;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
 
 namespace SS.ShareScreen.ViewModels
 {
+    [Export(typeof(ISSScreenShotViewModel))]
     public class SSScreenShotViewModel : SSUIBaseViewModel<ISSScreenShotView>, ISSScreenShotViewModel
     {
         public SSScreenShotViewModel()

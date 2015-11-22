@@ -14,12 +14,10 @@ using SS.ShareScreen.Interfaces.Core;
 
 namespace SS.ShareScreen.Core.MVVM
 {
-    public class SSBaseViewModel : ISSUIViewModel
+    public class SSBaseViewModel : ISSViewModel
     {
         private IDictionary<string, object> _values;
-        protected CompositionContainer Container;
         protected bool Disposed = false;
-        protected Interfaces.Core.ISSUIViewModel ParentViewModel;
 
         public SSBaseViewModel()
         {
@@ -28,6 +26,7 @@ namespace SS.ShareScreen.Core.MVVM
         ~SSBaseViewModel()
         {
         }
+        
 
         public void Dispose()
         {
@@ -53,19 +52,7 @@ namespace SS.ShareScreen.Core.MVVM
         {
             return default(T);
         }
-
-        ///
-        /// <param name="view"></param>
-        public virtual void HideDialog(ISSView view)
-        {
-        }
-
-        ///
-        /// <param name="parentModel"></param>
-        public void Initialize(ISSUIViewModel parentModel)
-        {
-        }
-
+        
         ///
         /// <param name="property"></param>
         protected virtual void OnPropertyChanged(string property) { }
@@ -90,10 +77,7 @@ namespace SS.ShareScreen.Core.MVVM
         {
         }
 
-        ///
-        /// <param name="view"></param>
-        public void ShowDialog(ISSView view)
-        {
-        }
+      
+        
     }//end SSBaseViewModel
 }//end namespace MVVM

@@ -6,9 +6,11 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System;
+
 namespace SS.ShareScreen.Interfaces.Core
 {
-    public interface ISSViewModel
+    public interface ISSViewModel : IDisposable
     {
     }//end ISSViewModel
 }//end namespace Core

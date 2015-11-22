@@ -6,7 +6,11 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Linq;
+using System.Windows;
 using SS.ShareScreen.Interfaces.Main;
 
 namespace SS.ShareScreen
@@ -19,22 +23,32 @@ namespace SS.ShareScreen
 
         ~SSBootstraper()
         {
+
         }
 
         public SSBootstraper()
         {
+            var aggregateCatalog = new AggregateCatalog();
+            string currentPath = Directory.GetCurrentDirectory();
+            aggregateCatalog.Catalogs.Add(new DirectoryCatalog(currentPath));
+            aggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(SSBootstraper).Assembly));
+            _container = new CompositionContainer(aggregateCatalog);
+            var composition = new CompositionBatch();
+            composition.AddExportedValue(_container);
+            _container.Compose(composition);
+            _mainViewModel = _container.GetExportedValue<ISSMainViewModel>();
         }
 
         public void Exit()
         {
+            _mainViewModel?.Dispose();
+            _mainViewModel = null;
         }
-
-        private void Initialize()
-        {
-        }
-
+        
         public void Run()
         {
+            _mainViewModel.Initialize(null);
+            _mainViewModel.ShowMainWindow();
         }
     }
     

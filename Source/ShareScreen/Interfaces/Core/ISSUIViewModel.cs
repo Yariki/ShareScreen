@@ -21,5 +21,8 @@ namespace SS.ShareScreen.Interfaces.Core
         ///
         /// <param name="view"></param>
         void ShowDialog(ISSView view);
+        
+        object View { get; }
+
     }//end ISSUIViewModel
 }//end namespace Core

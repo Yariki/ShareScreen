@@ -12,5 +12,6 @@ namespace SS.ShareScreen.Interfaces.Main
 {
     public interface ISSMainViewModel : ISSUIViewModel
     {
+        void ShowMainWindow();
     }//end ISSMainViewModel
 }//end namespace Main
