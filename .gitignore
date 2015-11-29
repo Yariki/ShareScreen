@@ -23,3 +23,5 @@ Samples/Samples/DrawOnScreen/bin/Debug/DrawOnScreen.vshost.exe
 /Source/PluginCore/*.user
 
 /Source/ShareScreen/*.user
+
+/Source/packages
