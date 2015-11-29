@@ -7,33 +7,48 @@
 ///////////////////////////////////////////////////////////
 
 using System;
+using System.Diagnostics.Contracts;
+using System.Windows.Input;
 
 namespace SS.ShareScreen.Core.Command
 {
-    public class SSCommand
+    public class SSCommand : ICommand
     {
-        private Func<bool> _canExecute;
+        private Func<object,bool> _canExecute;
         private Action<object> _execute;
-
-        public SSCommand()
-        {
-        }
-
-        ~SSCommand()
-        {
-        }
-
+        
         ///
         /// <param name="action"></param>
         public SSCommand(Action<object> action)
         {
+            Contract.Requires(action != null);
+            _execute = action;
         }
 
         ///
         /// <param name="execute"></param>
         /// <param name="canExecute"></param>
-        public SSCommand(Action<object> execute, Func<bool> canExecute)
+        public SSCommand(Action<object> execute, Func<object,bool> canExecute):this(execute)
         {
+            Contract.Requires(canExecute  != null);
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute != null && _canExecute(parameter);
+
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute(parameter);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
     }//end SSCommand
 }//end namespace Command

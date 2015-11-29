@@ -18,7 +18,7 @@ namespace SS.ShareScreen.Interfaces.InteractionManager
 
         ///
         /// <param name="action"></param>
-        void Subscribe(Action<TPayload> action);
+        ISSSubscribeToken Subscribe(Action<TPayload> action);
 
         ///
         /// <param name="token"></param>

@@ -83,6 +83,10 @@
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.2.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -121,6 +125,8 @@
     <Compile Include="Core\Payload\SSPayload.cs" />
     <Compile Include="Enums\eScreenshotType.cs" />
     <Compile Include="Enums\eSSMenuCommand.cs" />
+    <Compile Include="Extensions\CommonExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Interfaces\Core\ISSMenuItemViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSMenuViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSUIViewModel.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="Interfaces\InteractionManager\ISSReferenceDelegate.cs" />
     <Compile Include="Interfaces\InteractionManager\ISSSubscribeToken.cs" />
     <Compile Include="Interfaces\InteractionManager\ISSSubscription.cs" />
+    <Compile Include="Interfaces\Core\ISSLogger.cs" />
     <Compile Include="Interfaces\Main\ISSMainMenuView.cs" />
     <Compile Include="Interfaces\Main\ISSMainMenuViewModel.cs" />
     <Compile Include="Interfaces\Main\ISSMainStatusBarViewModel.cs" />
@@ -182,6 +189,12 @@
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>

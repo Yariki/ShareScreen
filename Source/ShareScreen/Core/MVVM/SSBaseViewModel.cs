@@ -8,8 +8,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Windows.Media.Animation;
+using SS.ShareScreen.Extensions;
 using SS.ShareScreen.Interfaces.Core;
 
 namespace SS.ShareScreen.Core.MVVM
@@ -21,6 +27,7 @@ namespace SS.ShareScreen.Core.MVVM
 
         public SSBaseViewModel()
         {
+            _values = new Dictionary<string, object>();
         }
 
         ~SSBaseViewModel()
@@ -30,19 +37,35 @@ namespace SS.ShareScreen.Core.MVVM
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         ///
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            
+            if (disposing)
+            {
+                if (_values.IsNotNull() && _values.Any())
+                {
+                    _values.Clear();
+                    _values = null;
+                }
+            }
+            Disposed = true;
         }
 
         ///
         /// <param name="property"></param>
         protected virtual T Get<T>(string property)
         {
+            Contract.Requires(property !=null);
+            Contract.Requires(property.Length > 0);
+            if (_values.ContainsKey(property))
+            {
+                return (T)_values[property];
+            }
             return default(T);
         }
 
@@ -50,24 +73,37 @@ namespace SS.ShareScreen.Core.MVVM
         /// <param name="property"></param>
         protected T Get<T>(Expression<Func<T>> property)
         {
-            return default(T);
+            var propertyName = GetPropertyName(property);
+            return Get<T>(propertyName);
         }
-        
-        ///
-        /// <param name="property"></param>
-        protected virtual void OnPropertyChanged(string property) { }
 
         ///
         /// <param name="property"></param>
-        protected void OnPropertyChanged<T>(Expression<Func<T>> property)
+        protected void OnPropertyChanged(string property)
         {
+            var temp = PropertyChanged;
+            if (temp.IsNotNull())
+            {
+                temp(this,new PropertyChangedEventArgs(property));
+            }
+        }
+
+        ///
+        /// <param name="property"></param>
+        protected virtual void OnPropertyChanged<T>(Expression<Func<T>> property)
+        {
+            Contract.Requires(property != null);
+            var memberExpression = property.Body as MemberExpression;
+            OnPropertyChanged(memberExpression.Member.Name);
         }
 
         ///
         /// <param name="property"></param>
         /// <param name="value"></param>
         protected virtual void Set<T>(string property, T value)
-        {   
+        {
+            _values[property] = value;
+            OnPropertyChanged(property);
         }
 
         ///
@@ -75,9 +111,22 @@ namespace SS.ShareScreen.Core.MVVM
         /// <param name="value"></param>
         protected void Set<T>(Expression<Func<T>> property, T value)
         {
+            var propertyName = GetPropertyName(property);
+            Set<T>(propertyName,value);
         }
 
-      
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected string GetPropertyName<T>(Expression<Func<T>> exp)
+        {
+            var memberExpression = exp.Body as MemberExpression;
+            if (memberExpression.IsNull())
+            {
+                return string.Empty;
+            }
+            return memberExpression.Member.Name;
+        }
         
     }//end SSBaseViewModel
 }//end namespace MVVM

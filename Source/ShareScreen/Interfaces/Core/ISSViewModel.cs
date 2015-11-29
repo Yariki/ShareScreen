@@ -7,10 +7,11 @@
 ///////////////////////////////////////////////////////////
 
 using System;
+using System.ComponentModel;
 
 namespace SS.ShareScreen.Interfaces.Core
 {
-    public interface ISSViewModel : IDisposable
+    public interface ISSViewModel : IDisposable, INotifyPropertyChanged
     {
     }//end ISSViewModel
 }//end namespace Core

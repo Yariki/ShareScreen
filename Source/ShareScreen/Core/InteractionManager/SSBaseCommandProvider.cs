@@ -6,7 +6,9 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.InteractionManager
@@ -17,6 +19,7 @@ namespace SS.ShareScreen.Core.InteractionManager
 
         public SSBaseCommandProvider()
         {
+            subscribers = new Dictionary<ISSSubscribeToken, ISSSubscription>();
         }
 
         ~SSBaseCommandProvider()
@@ -25,20 +28,38 @@ namespace SS.ShareScreen.Core.InteractionManager
 
         ///
         /// <param name="args"></param>
-        protected void InternalPublish(object args)
+        protected virtual void InternalPublish(object args)
         {
+            foreach (var keyValuePair in subscribers)
+            {
+                keyValuePair.Value.Publish(args);
+            }
         }
 
         ///
         /// <param name="subscription"></param>
-        protected void InternalSubscribe(ISSSubscription subscription)
+        protected virtual ISSSubscribeToken InternalSubscribe(ISSSubscription subscription)
         {
+            Contract.Requires(subscription != null);
+            var token = new SSSubscriptionToken();
+            subscription.Token = token;
+            subscribers.Add(token,subscription);
+            return token;
         }
 
         ///
         /// <param name="token"></param>
-        protected void InternalUnsubscribe(ISSSubscribeToken token)
+        protected virtual void InternalUnsubscribe(ISSSubscribeToken token)
         {
+            Contract.Requires(token != null);
+            Contract.Requires(token.Id != Guid.Empty);
+            subscribers.Remove(token);
         }
+
+        protected IDictionary<ISSSubscribeToken, ISSSubscription> GetSubscriptions()
+        {
+            return subscribers;
+        } 
+
     }//end SSBaseCommandProvider
 }//end namespace InteractionManager

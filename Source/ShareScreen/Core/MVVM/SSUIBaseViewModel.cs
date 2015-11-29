@@ -24,6 +24,12 @@ namespace SS.ShareScreen.Core.MVVM
 
         public SSUIBaseViewModel()
         {
+            
+        }
+
+        public SSUIBaseViewModel(ISSUIViewModel parentModel)
+        {
+            _parentViewModel = parentModel;
         }
 
         ~SSUIBaseViewModel()

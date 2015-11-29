@@ -10,6 +10,6 @@ namespace SS.ShareScreen.Interfaces.InteractionManager
 {
     public interface ISSInteractionManager
     {
-        T GetCommand<T>();
+        T GetCommand<T>() where T : ISSCommonCommandProvider,new();
     }//end ISSInteractionManager
 }//end namespace InteractionManager

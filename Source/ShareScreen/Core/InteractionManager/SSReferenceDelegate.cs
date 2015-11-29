@@ -13,8 +13,9 @@ namespace SS.ShareScreen.Core.InteractionManager
 {
     public class SSReferenceDelegate : ISSReferenceDelegate
     {
-        public SSReferenceDelegate()
+        public SSReferenceDelegate(Delegate action)
         {
+            Target = action;
         }
 
         ~SSReferenceDelegate()
@@ -23,7 +24,7 @@ namespace SS.ShareScreen.Core.InteractionManager
 
         public Delegate Target
         {
-            get; set;
+            get; private set;
         }
     }//end SSReferenceDelegate
 }//end namespace InteractionManager

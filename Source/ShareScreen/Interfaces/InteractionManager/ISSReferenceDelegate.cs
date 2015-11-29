@@ -15,7 +15,6 @@ namespace SS.ShareScreen.Interfaces.InteractionManager
         Delegate Target
         {
             get;
-            set;
         }
     }//end ISSReferenceDelegate
 }//end namespace InteractionManager

@@ -25,18 +25,22 @@ namespace SS.ShareScreen.Core.InteractionManager
         /// <param name="args"></param>
         public void Publish(TPayload args)
         {
+            InternalPublish(args);
         }
 
         ///
         /// <param name="action"></param>
-        public void Subscribe(Action<TPayload> action)
+        public ISSSubscribeToken Subscribe(Action<TPayload> action)
         {
+            var subscription = new SSCommandSubscription<TPayload>(new SSReferenceDelegate(action));
+            return InternalSubscribe(subscription);
         }
 
         ///
         /// <param name="token"></param>
         public void Unsubscribe(ISSSubscribeToken token)
         {
+            InternalUnsubscribe(token);
         }
     }//end SSCommandProvider
 }//end namespace InteractionManager

@@ -7,14 +7,16 @@
 ///////////////////////////////////////////////////////////
 
 using System;
+using System.Collections;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.InteractionManager
 {
-    public class SSSubscriptionToken : ISSSubscribeToken
+    public class SSSubscriptionToken : ISSSubscribeToken, IEquatable<ISSSubscribeToken>
     {
         public SSSubscriptionToken()
         {
+            Id = Guid.NewGuid();
         }
 
         ~SSSubscriptionToken()
@@ -23,14 +25,23 @@ namespace SS.ShareScreen.Core.InteractionManager
 
         public Guid Id
         {
-            get
-            {
-                return Id;
-            }
-            set
-            {
-                Id = value;
-            }
+            get; private set;
+        }
+
+        public bool Equals(ISSSubscribeToken other)
+        {
+            return (other == null) ? false 
+               : Equals(other,other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this,obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }//end SSSubscriptionToken
 }//end namespace InteractionManager

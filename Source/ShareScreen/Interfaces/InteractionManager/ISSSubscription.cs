@@ -13,5 +13,7 @@ namespace SS.ShareScreen.Interfaces.InteractionManager
         ///
         /// <param name="arg"></param>
         void Publish(object arg);
+
+        ISSSubscribeToken Token { get; set; }
     }//end ISSSubscription
 }//end namespace InteractionManager

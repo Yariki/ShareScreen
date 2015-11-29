@@ -15,7 +15,6 @@ namespace SS.ShareScreen.Interfaces.InteractionManager
         Guid Id
         {
             get;
-            set;
         }
     }//end ISSSubscribeToken
 }//end namespace InteractionManager

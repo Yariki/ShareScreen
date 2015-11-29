@@ -18,15 +18,23 @@ namespace SS.ShareScreen.Core.InteractionManager
 
         public SSInteractionManager()
         {
+            commandProviders = new Dictionary<Type, ISSCommonCommandProvider>();
         }
 
         ~SSInteractionManager()
         {
         }
 
-        public T GetCommand<T>()
+        public T GetCommand<T>() where T: ISSCommonCommandProvider,new()
         {
-            throw new NotImplementedException();
+            ISSCommonCommandProvider cmdProvider;
+            if (!commandProviders.TryGetValue(typeof (T), out cmdProvider))
+            {
+                T provider = new T();
+                commandProviders[typeof (T)] = provider;
+                return provider;
+            }
+            return (T) cmdProvider;
         }
     }//end SSInteractionManager
 }//end namespace InteractionManager

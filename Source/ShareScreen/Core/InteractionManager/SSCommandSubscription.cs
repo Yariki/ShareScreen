@@ -7,6 +7,7 @@
 ///////////////////////////////////////////////////////////
 
 using System;
+using System.Diagnostics.Contracts;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.InteractionManager
@@ -14,12 +15,14 @@ namespace SS.ShareScreen.Core.InteractionManager
     public class SSCommandSubscription<TPayload> : ISSSubscription
     {
         private Interfaces.InteractionManager.ISSReferenceDelegate _actionReference;
-        private Action<TPayload> Action;
-        public Interfaces.InteractionManager.ISSSubscribeToken Token;
 
-        public SSCommandSubscription()
+        public SSCommandSubscription(ISSReferenceDelegate reference)
         {
+            Contract.Requires(reference.Target != null);
+            _actionReference = reference;
         }
+
+        private Action<TPayload> Action => (Action<TPayload>) _actionReference.Target;
 
         ~SSCommandSubscription()
         {
@@ -29,6 +32,9 @@ namespace SS.ShareScreen.Core.InteractionManager
         /// <param name="arg"></param>
         public void Publish(object arg)
         {
+            Action((TPayload)arg);
         }
+
+        public ISSSubscribeToken Token { get; set; }
     }//end SSCommandSubscription
 }//end namespace InteractionManager

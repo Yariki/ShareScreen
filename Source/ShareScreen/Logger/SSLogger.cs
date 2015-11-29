@@ -6,16 +6,47 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System.ComponentModel.Composition;
+using NLog;
+using SS.ShareScreen.Interfaces;
+using SS.ShareScreen.Interfaces.Core;
+
 namespace SS.ShareScreen.Logger
 {
-    public class SSLogger
+    [Export(typeof(ISSLogger))]
+    public class SSLogger : ISSLogger
     {
+
+        private static NLog.Logger Logger => LogManager.GetCurrentClassLogger();
+
+        [ImportingConstructor]
         public SSLogger()
         {
         }
 
         ~SSLogger()
         {
+        }
+
+
+        public void Error(string message)
+        {
+            Logger?.Error(message);
+        }
+
+        public void Debug(string message)
+        {
+            Logger?.Debug(message);
+        }
+
+        public void Info(string message)
+        {
+            Logger?.Info(message);
+        }
+
+        public void Warning(string message)
+        {
+            Logger?.Warn(message);
         }
     }//end SSLogger
 }//end namespace Logger
