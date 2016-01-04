@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace SS.ShareScreen.Core.MVVM
     public class SSBaseViewModel : ISSViewModel
     {
         private IDictionary<string, object> _values;
+        private ISSLogger _logger;
         protected bool Disposed = false;
 
         public SSBaseViewModel()
@@ -33,7 +35,9 @@ namespace SS.ShareScreen.Core.MVVM
         ~SSBaseViewModel()
         {
         }
-        
+
+        [Import]
+        protected CompositionContainer Container { get; set; }
 
         public void Dispose()
         {
@@ -127,6 +131,9 @@ namespace SS.ShareScreen.Core.MVVM
             }
             return memberExpression.Member.Name;
         }
+
+        protected ISSLogger Logger => Container.GetExportedValue<ISSLogger>();
         
+
     }//end SSBaseViewModel
 }//end namespace MVVM

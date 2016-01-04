@@ -5,6 +5,12 @@
                       GlowBrush="{StaticResource AccentColorBrush4}"  
         Title="Share Screen">
     <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="Auto"></RowDefinition>
+      </Grid.RowDefinitions>
+      <ContentControl Grid.Row="0" Content="{Binding MenuViewModel.View}"></ContentControl>
         
     </Grid>
 </controls:MetroWindow>

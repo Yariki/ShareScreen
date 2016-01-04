@@ -13,7 +13,7 @@ namespace SS.ShareScreen.Interfaces.Core
 {
     public interface ISSMenuItemViewModel
     {
-        eSSMenuCommand Command
+        eSSMenuCommand MenuCommand
         {
             get;
         }

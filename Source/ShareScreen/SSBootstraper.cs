@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using SS.ShareScreen.Interfaces.Main;
+using SS.ShareScreen.Logger;
 
 namespace SS.ShareScreen
 {
@@ -33,8 +34,10 @@ namespace SS.ShareScreen
             aggregateCatalog.Catalogs.Add(new DirectoryCatalog(currentPath));
             aggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(SSBootstraper).Assembly));
             _container = new CompositionContainer(aggregateCatalog);
+            var logger = new SSLogger();
             var composition = new CompositionBatch();
             composition.AddExportedValue(_container);
+            composition.AddExportedValue(logger);
             _container.Compose(composition);
             _mainViewModel = _container.GetExportedValue<ISSMainViewModel>();
         }

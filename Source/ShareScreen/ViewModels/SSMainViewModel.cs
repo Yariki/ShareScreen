@@ -45,6 +45,11 @@ namespace SS.ShareScreen.ViewModels
         /// <param name="parentModel"></param>
         public override void Initialize(ISSUIViewModel parentModel)
         {
+            MenuViewModel?.InitializeMenu(null,null);
+            //MouseSystem?.StartSystem();
+            //KeyboardSystem?.StartSystem();
+            //PluginSystem?.StartSystem();
+            //ScreenShotSystem?.StartSystem();
         }
 
         public void ShowMainWindow()

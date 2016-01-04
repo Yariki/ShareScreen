@@ -10,5 +10,13 @@ namespace SS.ShareScreen.Enums
 {
     public enum eSSMenuCommand : int
     {
+        Close,
+        ScreenShot,
+        About,
+        Preferences,
+        MakeAllAcreen,
+        MakeRegionScreen,
+        MakeActiveWindow,
+
     }//end eSSMenuCommand
 }//end namespace Enums

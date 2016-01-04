@@ -19,8 +19,7 @@ namespace SS.ShareScreen.Core.MVVM
         private T _view;
         private ISSUIViewModel _parentViewModel;
 
-        [Import]
-        protected CompositionContainer Container { get; set; }
+       
 
         public SSUIBaseViewModel()
         {

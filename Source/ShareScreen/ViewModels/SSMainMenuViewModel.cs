@@ -32,21 +32,9 @@ namespace SS.ShareScreen.ViewModels
         {
         }
 
-        public IEnumerable<ISSMenuItemViewModel> File
-        {
-            get
-            {
-                return File;
-            }
-        }
+        public IEnumerable<ISSMenuItemViewModel> File { get; }
 
-        public IEnumerable<ISSMenuItemViewModel> Help
-        {
-            get
-            {
-                return Help;
-            }
-        }
+        public IEnumerable<ISSMenuItemViewModel> Help { get; }
 
         ///
         /// <param name="excuteAction"></param>

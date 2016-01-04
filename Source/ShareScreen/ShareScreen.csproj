@@ -159,6 +159,7 @@
     <Compile Include="Systems\Mouse\SSMouseSystem.cs" />
     <Compile Include="Systems\Plugins\SSPluginSystem.cs" />
     <Compile Include="Systems\Screenshot\SSScreenshotSystem.cs" />
+    <Compile Include="Core\MVVM\SSMenuItemViewModel.cs" />
     <Compile Include="ViewModels\SSMainMenuViewModel.cs" />
     <Compile Include="ViewModels\SSMainViewModel.cs" />
     <Compile Include="ViewModels\SSScreenShotViewModel.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Views\Main\SSMainStatusBarView.xaml.cs">
       <DependentUpon>SSMainStatusBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SSWindowsFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PluginCore\PluginCore.csproj">
@@ -218,6 +220,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Menu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
