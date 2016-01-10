@@ -14,7 +14,7 @@ namespace SS.ShareScreen.Enums
         ScreenShot,
         About,
         Preferences,
-        MakeAllAcreen,
+        MakeAllScreen,
         MakeRegionScreen,
         MakeActiveWindow,
 

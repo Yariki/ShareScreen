@@ -4,13 +4,14 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       GlowBrush="{StaticResource AccentColorBrush4}"  
         Title="Share Screen">
-    <Grid>
+    <Grid x:Name="RootMainShareScreen">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"></RowDefinition>
         <RowDefinition Height="*"></RowDefinition>
         <RowDefinition Height="Auto"></RowDefinition>
       </Grid.RowDefinitions>
-      <ContentControl Grid.Row="0" Content="{Binding MenuViewModel.View}"></ContentControl>
+      <ContentControl x:Name="ShareScreenMenu" Grid.Row="0" Content="{Binding MenuViewModel.View}">
+      </ContentControl>
         
     </Grid>
 </controls:MetroWindow>

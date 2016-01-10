@@ -12,6 +12,7 @@ using System.ComponentModel.Composition;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
+using SS.ShareScreen.ViewModels.Menu.File;
 
 namespace SS.ShareScreen.ViewModels
 {
@@ -32,15 +33,29 @@ namespace SS.ShareScreen.ViewModels
         {
         }
 
-        public IEnumerable<ISSMenuItemViewModel> File { get; }
+        public IEnumerable<ISSMenuItemViewModel> File { get; private set; }
 
-        public IEnumerable<ISSMenuItemViewModel> Help { get; }
+        public IEnumerable<ISSMenuItemViewModel> Help { get; private set; }
 
         ///
-        /// <param name="excuteAction"></param>
+        /// <param name="executeAction"></param>
         /// <param name="canExecuteAction"></param>
-        public void InitializeMenu(Action<object> excuteAction, Func<object, bool> canExecuteAction)
+        public void InitializeMenu(Action<object> executeAction, Func<object, bool> canExecuteAction)
         {
+            File = new List<ISSMenuItemViewModel>()
+            {
+                new SSScreeShotMenuItem(executeAction,canExecuteAction)
+                {
+                    SubItems = new List<ISSMenuItemViewModel>()
+                    {
+                        new SSMakeAllScreenMenuItem(executeAction,canExecuteAction),
+                        new SSMakeRegionScreenMenuItem(executeAction,canExecuteAction),
+                        new SSActiveWindowMenuItem(executeAction,canExecuteAction)
+                    }
+                },
+                new SSCloseMenuItem(executeAction,canExecuteAction)
+            };
+            
         }
     }//end SSMainMenuViewModel
 }//end namespace ViewModels

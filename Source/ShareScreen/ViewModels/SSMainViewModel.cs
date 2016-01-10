@@ -45,7 +45,7 @@ namespace SS.ShareScreen.ViewModels
         /// <param name="parentModel"></param>
         public override void Initialize(ISSUIViewModel parentModel)
         {
-            MenuViewModel?.InitializeMenu(null,null);
+            MenuViewModel?.InitializeMenu(ExecuteMenuCommand,CanExecuteManuCommand);
             //MouseSystem?.StartSystem();
             //KeyboardSystem?.StartSystem();
             //PluginSystem?.StartSystem();
@@ -92,5 +92,19 @@ namespace SS.ShareScreen.ViewModels
         {
             get; set;
         }
+
+
+        private void ExecuteMenuCommand(object arg)
+        {
+            
+        }
+
+
+
+        private bool CanExecuteManuCommand(object arg)
+        {
+            return true;
+        }
+
     }//end SSMainViewModel
 }//end namespace ViewModels

@@ -13,9 +13,9 @@ namespace SS.ShareScreen.Interfaces.Core
     public interface ISSMenuViewModel : ISSViewModel
     {
         ///
-        /// <param name="excuteAction"></param>
+        /// <param name="executeAction"></param>
         /// <param name="canExecuteAction"></param>
-        void InitializeMenu(Action<object> excuteAction, Func<object, bool> canExecuteAction);
+        void InitializeMenu(Action<object> executeAction, Func<object, bool> canExecuteAction);
 
     }//end ISSMenuViewModel
 }//end namespace Core

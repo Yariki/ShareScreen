@@ -12,7 +12,7 @@ namespace SS.ShareScreen.Core.MVVM
         public eSSMenuCommand MenuCommand => GetCommand();
         public string Icon => GetIcon();
         public bool IsParent { get; protected set; }
-        public virtual IEnumerable<ISSMenuItemViewModel> SubItems { get; }
+        public virtual IEnumerable<ISSMenuItemViewModel> SubItems { get; set; }
         public string UIName => GetUIName();
 
         public SSMenuItemViewModel(Action<object> execute, Func<object,bool> canExecute )

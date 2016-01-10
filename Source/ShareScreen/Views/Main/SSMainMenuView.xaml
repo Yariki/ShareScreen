@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SS.ShareScreen.Views.Main"
              xmlns:mvvm="clr-namespace:SS.ShareScreen.Core.MVVM">
   <UserControl.Resources>
-    <HierarchicalDataTemplate DataType="mvvm:SSMenuItemViewModel" ItemsSource="{Binding SubItems}">
+    <HierarchicalDataTemplate x:Key="MenuItemDataTemplate"  ItemsSource="{Binding SubItems}">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="16"></ColumnDefinition>
@@ -17,8 +17,8 @@
       </Grid>
     </HierarchicalDataTemplate> 
   </UserControl.Resources>
-    <Menu>
-      <MenuItem Header="File" ItemsSource="{Binding  File}"></MenuItem>
-      <MenuItem Header="Help" ItemsSource="{Binding  Help}"></MenuItem>
+    <Menu ItemTemplate="{StaticResource MenuItemDataTemplate}">
+      <MenuItem Header="File" ItemsSource="{Binding  File}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
+      <MenuItem Header="Help" ItemsSource="{Binding  Help}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
     </Menu>
 </UserControl>

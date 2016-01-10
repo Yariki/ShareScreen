@@ -35,7 +35,11 @@ namespace SS.ShareScreen.Views.Main
             InitializeComponent();
         }
 
-        public ISSViewModel Model { get; set; }
+        public ISSViewModel Model
+        {
+            get { return DataContext as ISSViewModel;}
+            set { DataContext = value; }
+        }
         public void ShowDialog(ISSView view)
         {
             Contract.Requires(view != null);

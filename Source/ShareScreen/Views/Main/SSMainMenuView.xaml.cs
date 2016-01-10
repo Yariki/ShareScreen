@@ -29,6 +29,13 @@ namespace SS.ShareScreen.Views.Main
             InitializeComponent();
         }
 
-        public ISSViewModel Model { get; set; }
+        public ISSViewModel Model
+        {
+            get
+            {
+                return DataContext as ISSViewModel;
+            }
+            set { DataContext = value; }
+        }
     }
 }
