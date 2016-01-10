@@ -9,6 +9,10 @@ namespace SS.ShareScreen.Core.MVVM
 {
     public abstract class SSMenuItemViewModel : ISSMenuItemViewModel
     {
+        private Action<object> _execute;
+        private Func<object, bool> _canExecute; 
+
+
         public eSSMenuCommand MenuCommand => GetCommand();
         public string Icon => GetIcon();
         public bool IsParent { get; protected set; }
@@ -17,10 +21,9 @@ namespace SS.ShareScreen.Core.MVVM
 
         public SSMenuItemViewModel(Action<object> execute, Func<object,bool> canExecute )
         {
-            Command = new SSCommand(execute, canExecute);
+            _execute = execute;
+            _canExecute = canExecute;
         }
-
-        public ICommand Command { get; private set; }
         
         protected abstract eSSMenuCommand GetCommand();
 
@@ -28,5 +31,16 @@ namespace SS.ShareScreen.Core.MVVM
 
         protected virtual string GetUIName() => "";
 
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute != null && _canExecute(this);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute?.Invoke(this);
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

@@ -6,6 +6,7 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
@@ -51,7 +52,14 @@ namespace SS.ShareScreen
         public void Run()
         {
             _mainViewModel.Initialize(null);
+            (_mainViewModel.View as Window).Closed += OnClosed;
             _mainViewModel.ShowMainWindow();
+        }
+
+        private void OnClosed(object sender, EventArgs eventArgs)
+        {
+            _mainViewModel.Dispose();
+            (_mainViewModel.View as Window).Closed -= OnClosed;
         }
     }
     

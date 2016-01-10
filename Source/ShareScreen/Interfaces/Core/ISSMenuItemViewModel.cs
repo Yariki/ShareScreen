@@ -7,11 +7,12 @@
 ///////////////////////////////////////////////////////////
 
 using System.Collections.Generic;
+using System.Windows.Input;
 using SS.ShareScreen.Enums;
 
 namespace SS.ShareScreen.Interfaces.Core
 {
-    public interface ISSMenuItemViewModel
+    public interface ISSMenuItemViewModel : ICommand
     {
         eSSMenuCommand MenuCommand
         {

@@ -33,6 +33,12 @@ namespace SS.ShareScreen.ViewModels
         /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                MenuViewModel?.Dispose();
+                KeyboardSystem?.StopSystem();
+                MouseSystem?.StopSystem();
+            }
         }
 
         ///
@@ -46,8 +52,8 @@ namespace SS.ShareScreen.ViewModels
         public override void Initialize(ISSUIViewModel parentModel)
         {
             MenuViewModel?.InitializeMenu(ExecuteMenuCommand,CanExecuteManuCommand);
-            //MouseSystem?.StartSystem();
-            //KeyboardSystem?.StartSystem();
+            KeyboardSystem?.StartSystem();
+            MouseSystem?.StartSystem();
             //PluginSystem?.StartSystem();
             //ScreenShotSystem?.StartSystem();
         }
@@ -105,6 +111,10 @@ namespace SS.ShareScreen.ViewModels
         {
             return true;
         }
+
+
+
+
 
     }//end SSMainViewModel
 }//end namespace ViewModels
