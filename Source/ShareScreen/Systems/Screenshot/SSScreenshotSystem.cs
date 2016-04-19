@@ -20,7 +20,7 @@ namespace SS.ShareScreen.Systems.Screenshot
 
         public Bitmap GetScreenshot()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Bitmap GetScreenshotOfSelectedArea(Point leftTop, Point bottomRight)

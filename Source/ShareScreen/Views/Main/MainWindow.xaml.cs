@@ -58,6 +58,21 @@ namespace SS.ShareScreen.Views.Main
             this.HideMetroDialogAsync(dialog);
         }
 
+        public void MaximazeMainWindow()
+        {
+            this.WindowState = WindowState.Maximized;
+        }
+
+        public void MinimizeMainWindow()
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        public void NormalizeMainWindow()
+        {
+            this.WindowState = WindowState.Normal;
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);

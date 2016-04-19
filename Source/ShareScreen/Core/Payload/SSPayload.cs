@@ -6,29 +6,26 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using SS.ShareScreen.Interfaces.Core;
+
 namespace SS.ShareScreen.Core.Payload
 {
-    public class SSPayload<T>
+    public class SSPayload<T> : ISSPayload
     {
         private T value;
 
         public SSPayload()
         {
         }
-
-        ~SSPayload()
-        {
-        }
-
         public T Value
         {
             get
             {
-                return Value;
+                return this.value;
             }
             set
             {
-                Value = value;
+                this.value = value;
             }
         }
     }//end SSPayload

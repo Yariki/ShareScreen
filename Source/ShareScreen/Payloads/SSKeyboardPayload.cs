@@ -17,9 +17,6 @@ namespace SS.ShareScreen.Payloads
         {
         }
 
-        ~SSKeyboardPayload()
-        {
-        }
 
     }//end SSKeyboardPayload
 }//end namespace Payloads

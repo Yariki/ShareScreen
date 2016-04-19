@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using SS.ShareScreen.Extensions;
 using SS.ShareScreen.Interfaces.Core;
+using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.MVVM
 {
@@ -38,6 +39,9 @@ namespace SS.ShareScreen.Core.MVVM
 
         [Import]
         protected CompositionContainer Container { get; set; }
+
+        [Import]
+        protected ISSInteractionManager InteractionManager { get; set; }
 
         public void Dispose()
         {

@@ -7,11 +7,13 @@
 ///////////////////////////////////////////////////////////
 
 using System;
+using SS.ShareScreen.Core.Payload;
+using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.InteractionManager
 {
-    public class SSCommandProvider<TPayload> : SSBaseCommandProvider, ISSCommandProvider<TPayload>
+    public class SSCommandProvider<TPayload> : SSBaseCommandProvider, ISSCommandProvider<TPayload> where TPayload : ISSPayload
     {
         public SSCommandProvider()
         {

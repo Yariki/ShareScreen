@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.System;
 using SS.ShareScreen.Windows;
 
@@ -16,6 +18,10 @@ namespace SS.ShareScreen.Core.Systems
         {
             _this = this;
         }
+
+        [Import]
+        public ISSInteractionManager InteractionManager { get; set; }
+
 
         public void StartSystem()
         {

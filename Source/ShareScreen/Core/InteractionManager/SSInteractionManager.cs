@@ -8,10 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Core.InteractionManager
 {
+    [Export(typeof(ISSInteractionManager))]
     public class SSInteractionManager : ISSInteractionManager
     {
         private IDictionary<Type, ISSCommonCommandProvider> commandProviders;

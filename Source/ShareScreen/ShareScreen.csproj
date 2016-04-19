@@ -135,8 +135,13 @@
     <Compile Include="Enums\eSSMenuCommand.cs" />
     <Compile Include="Extensions\CommonExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="InteractionProviders\SSKeyboardProvider.cs" />
+    <Compile Include="InteractionProviders\SSMaximazeMainWindowProvider.cs" />
+    <Compile Include="InteractionProviders\SSMinimizeMainWindowProvider.cs" />
+    <Compile Include="InteractionProviders\SSNormalizeMainWindowProvider.cs" />
     <Compile Include="Interfaces\Core\ISSMenuItemViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSMenuViewModel.cs" />
+    <Compile Include="Interfaces\Core\ISSPayload.cs" />
     <Compile Include="Interfaces\Core\ISSUIViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSView.cs" />
     <Compile Include="Interfaces\Core\ISSViewModel.cs" />
@@ -238,13 +243,6 @@
     <Folder Include="ViewModels\Menu\Help\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\XamlSpy.3.0.1-preview\build\XamlSpy.targets" Condition="Exists('..\packages\XamlSpy.3.0.1-preview\build\XamlSpy.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\XamlSpy.3.0.1-preview\build\XamlSpy.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\XamlSpy.3.0.1-preview\build\XamlSpy.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -6,13 +6,23 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.Windows;
+using SS.ShareScreen.Core.InteractionManager;
 using SS.ShareScreen.Core.MVVM;
+using SS.ShareScreen.Core.Payload;
+using SS.ShareScreen.Enums;
+using SS.ShareScreen.Extensions;
+using SS.ShareScreen.InteractionProviders;
 using SS.ShareScreen.Interfaces.Core;
+using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.Main;
 using SS.ShareScreen.Interfaces.System;
+using SS.ShareScreen.Logger;
+using SS.ShareScreen.Payloads;
 
 namespace SS.ShareScreen.ViewModels
 {
@@ -20,12 +30,13 @@ namespace SS.ShareScreen.ViewModels
     public class SSMainViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainViewModel
     {
         private List<ISSScreenShotViewModel> _screenShotList;
+        private ISSSubscribeToken _keyboardToken;
+        private ISSSubscribeToken _normalizeToken;
+        private ISSSubscribeToken _maximazeToken;
+        private ISSSubscribeToken _minimazeToken;
+
 
         public SSMainViewModel()
-        {
-        }
-
-        ~SSMainViewModel()
         {
         }
 
@@ -38,7 +49,9 @@ namespace SS.ShareScreen.ViewModels
                 MenuViewModel?.Dispose();
                 KeyboardSystem?.StopSystem();
                 MouseSystem?.StopSystem();
+                InteractionManager.GetCommand<SSNormalizeMainWindowProvider>().Unsubscribe(_normalizeToken);
             }
+            base.Dispose(disposing);
         }
 
         ///
@@ -51,16 +64,17 @@ namespace SS.ShareScreen.ViewModels
         /// <param name="parentModel"></param>
         public override void Initialize(ISSUIViewModel parentModel)
         {
-            MenuViewModel?.InitializeMenu(ExecuteMenuCommand,CanExecuteManuCommand);
+            MenuViewModel?.InitializeMenu(ExecuteMenuCommand, CanExecuteManuCommand);
             KeyboardSystem?.StartSystem();
             MouseSystem?.StartSystem();
             //PluginSystem?.StartSystem();
             //ScreenShotSystem?.StartSystem();
+            SubscribeInteractionProviders();
         }
 
         public void ShowMainWindow()
         {
-            (View as Window).Show();
+            InternalWindow.Show();
         }
 
         [Import]
@@ -99,10 +113,15 @@ namespace SS.ShareScreen.ViewModels
             get; set;
         }
 
+        private Window InternalWindow
+        {
+            get { return View as Window; }
+        }
+
 
         private void ExecuteMenuCommand(object arg)
         {
-            
+
         }
 
 
@@ -113,8 +132,52 @@ namespace SS.ShareScreen.ViewModels
         }
 
 
+        private void SubscribeInteractionProviders()
+        {
+            _keyboardToken = InteractionManager.GetCommand<SSKeyboardProvider>().Subscribe(OnKeyboardAction);
+            _normalizeToken = InteractionManager.GetCommand<SSNormalizeMainWindowProvider>()
+                .Subscribe(OnNormalizeWindow);
+            _maximazeToken = InteractionManager.GetCommand<SSMaximazeMainWindowProvider>().Subscribe(OnMaximazeWindow);
+            _minimazeToken = InteractionManager.GetCommand<SSMinimizeMainWindowProvider>().Subscribe(OnMinimazeWindow);
+        }
+
+        private void OnMinimazeWindow(SSPayload<object> ssPayload)
+        {
+            InternalWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void OnMaximazeWindow(SSPayload<object> ssPayload)
+        {
+            InternalWindow.WindowState = WindowState.Maximized;
+        }
+
+        private void OnNormalizeWindow(SSPayload<object> ssPayload)
+        {
+            InternalWindow.WindowState = WindowState.Normal;
+        }
+
+
+        private void OnKeyboardAction(SSKeyboardPayload ssKeyboardPayload)
+        {
+            Contract.Requires(ssKeyboardPayload != null);
+            Logger.Debug(Enum.GetName(typeof(eScreenshotType), ssKeyboardPayload.Value));
+            switch (ssKeyboardPayload.Value)
+            {
+                case eScreenshotType.Screen:
+                    InternalWindow.WindowState = WindowState.Minimized;
+                    ScreenShotSystem.GetScreenshot();
+                    InternalWindow.WindowState = WindowState.Normal;
+                    break;
+                case eScreenshotType.SelectedArea:
+                    break;
+                case eScreenshotType.SelectedWindow:
+                    break;
+            }
 
 
 
+
+
+        }
     }//end SSMainViewModel
 }//end namespace ViewModels

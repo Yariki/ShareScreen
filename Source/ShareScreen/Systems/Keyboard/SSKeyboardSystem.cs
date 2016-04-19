@@ -2,7 +2,10 @@
 using System.ComponentModel.Composition;
 using System.Windows.Forms;
 using SS.ShareScreen.Core.Systems;
+using SS.ShareScreen.Enums;
+using SS.ShareScreen.InteractionProviders;
 using SS.ShareScreen.Interfaces.System;
+using SS.ShareScreen.Payloads;
 using SS.ShareScreen.Windows;
 
 namespace SS.ShareScreen.Systems.Keyboard
@@ -33,9 +36,20 @@ namespace SS.ShareScreen.Systems.Keyboard
             if (code >= 0 && (wParam == SSWindowsFunctions.WM_KEYDOWN || wParam == SSWindowsFunctions.WM_SYSKEYDOWN))
             {
                 var key = (System.Windows.Forms.Keys)Enum.Parse(typeof (System.Windows.Forms.Keys), lParam.vkCode.ToString());
-                if (LastKey == Keys.LControlKey && key == Keys.C)
+                if (key == Keys.PrintScreen)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Combination: {key}");
+                    ((SSBaseHookSystem)GetHookSystem()).InteractionManager.GetCommand<SSKeyboardProvider>().Publish(new SSKeyboardPayload() { Value = eScreenshotType.Screen });
+                }
+                else if (LastKey == Keys.LControlKey && key == Keys.NumPad1)
                 {
                     System.Diagnostics.Debug.WriteLine($"Combination: {LastKey}+{key}");
+                    ((SSBaseHookSystem)GetHookSystem()).InteractionManager.GetCommand<SSKeyboardProvider>().Publish(new SSKeyboardPayload() {Value = eScreenshotType.SelectedArea});
+                }
+                else if (LastKey == Keys.LControlKey && key == Keys.NumPad2)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Combination: {LastKey}+{key}");
+                    ((SSBaseHookSystem)GetHookSystem()).InteractionManager.GetCommand<SSKeyboardProvider>().Publish(new SSKeyboardPayload() { Value = eScreenshotType.SelectedWindow });
                 }
                 LastKey = key;
             }

@@ -15,5 +15,12 @@ namespace SS.ShareScreen.Interfaces.Main
         void ShowDialog(ISSView view);
 
         void HideDialog(ISSView view);
+
+        void MaximazeMainWindow();
+
+        void MinimizeMainWindow();
+
+
+        void NormalizeMainWindow();
     }//end ISSMainView
 }//end namespace Main
