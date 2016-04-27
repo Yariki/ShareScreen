@@ -4,6 +4,11 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       GlowBrush="{StaticResource AccentColorBrush4}"  
         Title="Share Screen">
+    
+    <controls:MetroWindow.Resources>
+        
+        
+    </controls:MetroWindow.Resources>
     <Grid x:Name="RootMainShareScreen">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"></RowDefinition>
@@ -12,6 +17,21 @@
       </Grid.RowDefinitions>
       <ContentControl x:Name="ShareScreenMenu" Grid.Row="0" Content="{Binding MenuViewModel.View}">
       </ContentControl>
+      <TabControl Grid.Row="1" ItemsSource="{Binding ScreenShots,UpdateSourceTrigger=PropertyChanged}" >
+          <TabControl.ItemTemplate>
+              <DataTemplate>
+                  <TextBlock Text="{Binding Header}"></TextBlock>
+              </DataTemplate>
+          </TabControl.ItemTemplate>
+          <TabControl.ContentTemplate>
+              <DataTemplate>
+                  <ContentControl Content="{Binding View}"></ContentControl>
+              </DataTemplate>
+          </TabControl.ContentTemplate>
+          
+          
+      </TabControl>
+        
         
     </Grid>
 </controls:MetroWindow>

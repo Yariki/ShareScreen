@@ -6,7 +6,13 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
@@ -14,15 +20,39 @@ using SS.ShareScreen.Interfaces.Main;
 namespace SS.ShareScreen.ViewModels
 {
     [Export(typeof(ISSScreenShotViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SSScreenShotViewModel : SSUIBaseViewModel<ISSScreenShotView>, ISSScreenShotViewModel
     {
         public SSScreenShotViewModel()
         {
         }
 
-        ~SSScreenShotViewModel()
+        public string Header
         {
+            set { Set(() => Header, value); }
+            get { return Get(() => Header); }
         }
+
+        public void SetScreenShot(Bitmap screenShot)
+        {
+            Contract.Ensures(screenShot != null);
+            ScreenShot = screenShot;
+            ImageSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ScreenShot.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        }
+
+
+        public Bitmap ScreenShot
+        {
+            get { return Get(() => ScreenShot); }
+            private set { Set(() => ScreenShot, value);}
+        }
+
+        public ImageSource ImageSource
+        {
+            set { Set(() => ImageSource, value); }
+            private get { return Get(() => ImageSource); }
+        }
+        
 
         ///
         /// <param name="disposing"></param>

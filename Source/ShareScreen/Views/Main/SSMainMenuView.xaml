@@ -12,7 +12,7 @@
           <ColumnDefinition Width="16"></ColumnDefinition>
           <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-      <Image Grid.Column="0" Source="{Binding Icon}"></Image>      
+      <!--<Image Grid.Column="0" Source="{Binding Icon}"></Image>-->      
       <TextBlock Grid.Column="1" Text="{Binding UIName}"></TextBlock>
       </Grid>
     </HierarchicalDataTemplate> 

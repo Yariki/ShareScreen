@@ -6,11 +6,14 @@
 //  Original author: Yariki
 ///////////////////////////////////////////////////////////
 
+using System.Drawing;
 using SS.ShareScreen.Interfaces.Core;
 
 namespace SS.ShareScreen.Interfaces.Main
 {
     public interface ISSScreenShotViewModel : ISSUIViewModel
     {
+        void SetScreenShot(Bitmap screenShot);
+        string Header { set; get; }
     }//end ISSScreenShotViewModel
 }//end namespace Main

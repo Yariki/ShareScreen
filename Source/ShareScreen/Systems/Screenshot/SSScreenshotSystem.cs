@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
 using SS.ShareScreen.Interfaces.System;
 
 namespace SS.ShareScreen.Systems.Screenshot
@@ -10,17 +12,24 @@ namespace SS.ShareScreen.Systems.Screenshot
     {
         public void StartSystem()
         {
-            throw new NotImplementedException();
         }
 
         public void StopSystem()
         {
-            throw new NotImplementedException();
         }
 
         public Bitmap GetScreenshot()
         {
-            return null;
+            Bitmap screenShot = new Bitmap(SystemInformation.VirtualScreen.Width,
+                SystemInformation.VirtualScreen.Height,
+                PixelFormat.Format32bppArgb);
+            Graphics screen = Graphics.FromImage(screenShot);
+            screen.CopyFromScreen(SystemInformation.VirtualScreen.X,SystemInformation.VirtualScreen.Y,
+                0,
+                0,
+                SystemInformation.VirtualScreen.Size,
+                CopyPixelOperation.SourceCopy);
+            return screenShot;
         }
 
         public Bitmap GetScreenshotOfSelectedArea(Point leftTop, Point bottomRight)

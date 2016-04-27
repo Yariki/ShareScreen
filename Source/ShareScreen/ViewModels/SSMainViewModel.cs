@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Windows;
@@ -38,6 +39,7 @@ namespace SS.ShareScreen.ViewModels
 
         public SSMainViewModel()
         {
+
         }
 
         ///
@@ -68,7 +70,8 @@ namespace SS.ShareScreen.ViewModels
             KeyboardSystem?.StartSystem();
             MouseSystem?.StartSystem();
             //PluginSystem?.StartSystem();
-            //ScreenShotSystem?.StartSystem();
+            ScreenShotSystem?.StartSystem();
+            ScreenShots = new ObservableCollection<ISSScreenShotViewModel>();
             SubscribeInteractionProviders();
         }
 
@@ -118,10 +121,24 @@ namespace SS.ShareScreen.ViewModels
             get { return View as Window; }
         }
 
+        public ObservableCollection<ISSScreenShotViewModel> ScreenShots
+        {
+            get { return Get(() => ScreenShots); }
+            set { Set(() => ScreenShots, value); }
+        }
+
 
         private void ExecuteMenuCommand(object arg)
         {
+            Contract.Ensures(arg is SSMenuItemViewModel);
 
+            var menuItem = arg as SSMenuItemViewModel;
+            switch (menuItem.MenuCommand)
+            {
+                case eSSMenuCommand.MakeAllScreen:
+                    MakeScreenShot();
+                    break;
+            }
         }
 
 
@@ -164,20 +181,29 @@ namespace SS.ShareScreen.ViewModels
             switch (ssKeyboardPayload.Value)
             {
                 case eScreenshotType.Screen:
-                    InternalWindow.WindowState = WindowState.Minimized;
-                    ScreenShotSystem.GetScreenshot();
-                    InternalWindow.WindowState = WindowState.Normal;
+                    MakeScreenShot();
                     break;
                 case eScreenshotType.SelectedArea:
                     break;
                 case eScreenshotType.SelectedWindow:
+
+
                     break;
             }
+        }
 
-
-
-
-
+        private void MakeScreenShot()
+        {
+            InternalWindow.WindowState = WindowState.Minimized;
+            var screen = ScreenShotSystem.GetScreenshot();
+            InternalWindow.WindowState = WindowState.Normal;
+            var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
+            if (shot.IsNotNull())
+            {
+                shot.Header = "Screen Shot";
+                shot.SetScreenShot(screen);
+                ScreenShots.Add(shot);
+            }
         }
     }//end SSMainViewModel
 }//end namespace ViewModels
