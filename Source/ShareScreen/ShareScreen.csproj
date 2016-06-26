@@ -135,6 +135,7 @@
     <Compile Include="InteractionProviders\SSMaximazeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSMinimizeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSNormalizeMainWindowProvider.cs" />
+    <Compile Include="InteractionProviders\SSSelectedWindowProvider.cs" />
     <Compile Include="Interfaces\Core\ISSMenuItemViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSMenuViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSPayload.cs" />
@@ -210,6 +211,7 @@
   <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
@@ -243,6 +245,7 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\" />
     <Folder Include="ViewModels\Menu\Help\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

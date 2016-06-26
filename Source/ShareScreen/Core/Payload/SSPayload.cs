@@ -17,6 +17,11 @@ namespace SS.ShareScreen.Core.Payload
         public SSPayload()
         {
         }
+
+        public SSPayload(T val)
+        {
+            Value = val;
+        }
         public T Value
         {
             get

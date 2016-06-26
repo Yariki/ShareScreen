@@ -17,5 +17,8 @@ namespace SS.ShareScreen.Interfaces.System
 
         IntPtr GetSelectedWindow();
 
+        void RunSelectingWindow();
+        void RunSelectingArea();
+        void ResetCurrentAction();
     }//end ISSMouseSystem
 }//end namespace System

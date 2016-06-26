@@ -35,6 +35,7 @@ namespace SS.ShareScreen.ViewModels
         private ISSSubscribeToken _normalizeToken;
         private ISSSubscribeToken _maximazeToken;
         private ISSSubscribeToken _minimazeToken;
+        private ISSSubscribeToken _selectionWindowToken;
 
 
         public SSMainViewModel()
@@ -52,6 +53,7 @@ namespace SS.ShareScreen.ViewModels
                 KeyboardSystem?.StopSystem();
                 MouseSystem?.StopSystem();
                 InteractionManager.GetCommand<SSNormalizeMainWindowProvider>().Unsubscribe(_normalizeToken);
+                InteractionManager.GetCommand<SSSelectedWindowProvider>().Unsubscribe(_selectionWindowToken);
             }
             base.Dispose(disposing);
         }
@@ -138,6 +140,9 @@ namespace SS.ShareScreen.ViewModels
                 case eSSMenuCommand.MakeAllScreen:
                     MakeScreenShot();
                     break;
+                case eSSMenuCommand.MakeActiveWindow:
+                    MakeScreenShotOfSelectedWindow();
+                    break;
             }
         }
 
@@ -156,6 +161,23 @@ namespace SS.ShareScreen.ViewModels
                 .Subscribe(OnNormalizeWindow);
             _maximazeToken = InteractionManager.GetCommand<SSMaximazeMainWindowProvider>().Subscribe(OnMaximazeWindow);
             _minimazeToken = InteractionManager.GetCommand<SSMinimizeMainWindowProvider>().Subscribe(OnMinimazeWindow);
+            _selectionWindowToken =
+                InteractionManager.GetCommand<SSSelectedWindowProvider>().Subscribe(OnSelectionWindow);
+        }
+
+        private void OnSelectionWindow(SSPayload<bool> ssPayload)
+        {
+            MouseSystem.ResetCurrentAction();
+            if (ssPayload.Value)
+            {
+                var selectedWindow = MouseSystem.GetSelectedWindow();
+                System.Diagnostics.Debug.WriteLine(string.Format("SelectedWindow: {0}", selectedWindow));
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format("SelectedWindow was canceled..."));
+            }
+            InternalWindow.WindowState = WindowState.Normal;
         }
 
         private void OnMinimazeWindow(SSPayload<object> ssPayload)
@@ -186,8 +208,7 @@ namespace SS.ShareScreen.ViewModels
                 case eScreenshotType.SelectedArea:
                     break;
                 case eScreenshotType.SelectedWindow:
-
-
+                    MakeScreenShotOfSelectedWindow();
                     break;
             }
         }
@@ -204,6 +225,12 @@ namespace SS.ShareScreen.ViewModels
                 shot.SetScreenShot(screen);
                 ScreenShots.Add(shot);
             }
+        }
+
+        private void MakeScreenShotOfSelectedWindow()
+        {
+            InternalWindow.WindowState = WindowState.Minimized;
+            MouseSystem.RunSelectingWindow();
         }
     }//end SSMainViewModel
 }//end namespace ViewModels
