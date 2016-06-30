@@ -179,6 +179,20 @@ namespace SS.ShareScreen.Windows
             return ptr;
         }
 
+        public static void RefreshWindow(IntPtr hWnd)
+        {
+            SSWindowsFunctions.InvalidateRect(hWnd, IntPtr.Zero, true);
+            SSWindowsFunctions.UpdateWindow(hWnd);
+            SSWindowsFunctions.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero,
+                  SSWindowsFunctions.RedrawWindowFlags.Frame
+                | SSWindowsFunctions.RedrawWindowFlags.Invalidate
+                | SSWindowsFunctions.RedrawWindowFlags.UpdateNow
+                | SSWindowsFunctions.RedrawWindowFlags.AllChildren);
+        }
+
+
+
+
         [DllImport("user32.dll")]
         public static extern IntPtr WindowFromPoint(POINT p);
 

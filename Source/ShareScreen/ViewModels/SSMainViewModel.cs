@@ -172,6 +172,15 @@ namespace SS.ShareScreen.ViewModels
             {
                 var selectedWindow = MouseSystem.GetSelectedWindow();
                 System.Diagnostics.Debug.WriteLine(string.Format("SelectedWindow: {0}", selectedWindow));
+                var activeWnd = ScreenShotSystem.GetScreenshtOfSelectedWindow(selectedWindow);
+                var activeShot = Container.GetExportedValue<ISSScreenShotViewModel>();
+                if (activeShot.IsNotNull())
+                {
+                    activeShot.Header = "Selected Window";
+                    activeShot.SetScreenShot(activeWnd);
+                    ScreenShots.Add(activeShot);
+                }
+
             }
             else
             {

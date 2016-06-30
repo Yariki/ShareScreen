@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Media;
 using SS.ShareScreen.Core.Payload;
 using SS.ShareScreen.Core.Systems;
 using SS.ShareScreen.Enums;
@@ -24,8 +25,6 @@ namespace SS.ShareScreen.Systems.Mouse
         private static IntPtr _selectedWindow;
         private static IntPtr _oldHwnd;
         private static eScreenshotType _screenshotType = eScreenshotType.None;
-        
-        private static readonly IntPtr _higlightPen = SSWindowsFunctions.CreatePen(SSWindowsFunctions.PenStyle.PS_SOLID,3,(uint)ColorTranslator.ToWin32(Color.Red));
         
         [ImportingConstructor]
         public SSMouseSystem()
@@ -69,7 +68,7 @@ namespace SS.ShareScreen.Systems.Mouse
 
             if (_oldHwnd != IntPtr.Zero)
             {
-                RefreshWindow(_oldHwnd);
+                SSWindowsFunctions.RefreshWindow(_oldHwnd);
                 _oldHwnd = IntPtr.Zero;
             }
 
@@ -86,7 +85,7 @@ namespace SS.ShareScreen.Systems.Mouse
                             ProcessSelectingWindow(wParam);
                             _oldHwnd = _selectedWindow;
                         }
-                        
+
                         break;
                     case eScreenshotType.SelectedArea:
                         break;
@@ -115,42 +114,21 @@ namespace SS.ShareScreen.Systems.Mouse
             SSWindowsFunctions.RECT rc = new SSWindowsFunctions.RECT();
 
             SSWindowsFunctions.GetWindowRect(hWnd, out rc);
-
-            IntPtr hPrevPen = IntPtr.Zero;
-            IntPtr hPrevBrush = IntPtr.Zero;
-            
             var hDC = SSWindowsFunctions.GetWindowDC(hWnd);
-
-             
 
             if (hDC != IntPtr.Zero)
             {
-                hPrevPen = SSWindowsFunctions.SelectObject(hDC, _higlightPen);
-
-                hPrevBrush = SSWindowsFunctions.SelectObject(hDC,
-                    SSWindowsFunctions.GetStockObject(SSWindowsFunctions.StockObjects.HOLLOW_BRUSH));
-
-                SSWindowsFunctions.Rectangle(hDC, -1, -1, rc.Right - rc.Left, rc.Bottom - rc.Top);
-
-                SSWindowsFunctions.SelectObject(hDC, hPrevPen);
-                SSWindowsFunctions.SelectObject(hDC, hPrevBrush);
-                
+                using (var graphics = Graphics.FromHdc(hDC))
+                {
+                    var pen = new Pen(Color.Red,3);
+                    graphics.DrawRectangle(pen,0,0, rc.Right - rc.Left,rc.Bottom - rc.Top);
+                }
                 SSWindowsFunctions.ReleaseDC(hWnd, hDC);
             }
             
         }
 
-        private static void RefreshWindow(IntPtr hWnd)
-        {
-            SSWindowsFunctions.InvalidateRect(hWnd, IntPtr.Zero, true);
-            SSWindowsFunctions.UpdateWindow(hWnd);
-            SSWindowsFunctions.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero,
-                  SSWindowsFunctions.RedrawWindowFlags.Frame 
-                | SSWindowsFunctions.RedrawWindowFlags.Invalidate 
-                | SSWindowsFunctions.RedrawWindowFlags.UpdateNow 
-                | SSWindowsFunctions.RedrawWindowFlags.AllChildren);
-        }
-
+        
         #endregion
 
 

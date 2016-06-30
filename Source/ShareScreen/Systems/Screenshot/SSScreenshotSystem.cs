@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using SS.ShareScreen.Interfaces.System;
+using SS.ShareScreen.Windows;
 
 namespace SS.ShareScreen.Systems.Screenshot
 {
@@ -39,7 +41,21 @@ namespace SS.ShareScreen.Systems.Screenshot
 
         public Bitmap GetScreenshtOfSelectedWindow(IntPtr handle)
         {
-            throw new NotImplementedException();
+            Contract.Requires(handle != IntPtr.Zero);
+
+            SSWindowsFunctions.RefreshWindow(handle);
+
+            SSWindowsFunctions.RECT rc = new SSWindowsFunctions.RECT();
+
+            SSWindowsFunctions.GetWindowRect(handle, out rc);
+            var bound = new Rectangle(rc.Left,rc.Top,rc.Right - rc.Left,rc.Bottom - rc.Top);
+            var result = new Bitmap(bound.Width,bound.Height);
+
+            using (var graphics = Graphics.FromImage(result))
+            {
+                graphics.CopyFromScreen(new Point(bound.Left,bound.Top),Point.Empty,bound.Size);
+            }
+            return result;
         }
     }
 }
