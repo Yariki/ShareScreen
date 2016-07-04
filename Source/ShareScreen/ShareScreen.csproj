@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Output\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CONTRACTS_FULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
@@ -76,7 +76,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\ROutput\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;CONTRACTS_FULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -116,6 +116,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SSSelectionCanvas.cs" />
     <Compile Include="Core\Command\SSCommand.cs" />
     <Compile Include="Core\InteractionManager\SSBaseCommandProvider.cs" />
     <Compile Include="Core\InteractionManager\SSCommandProvider.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="InteractionProviders\SSMinimizeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSNormalizeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSSelectedWindowProvider.cs" />
+    <Compile Include="InteractionProviders\SSSelectionRegionProvider.cs" />
+    <Compile Include="Interfaces\Controls\ISSSelectionWindow.cs" />
     <Compile Include="Interfaces\Core\ISSMenuItemViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSMenuViewModel.cs" />
     <Compile Include="Interfaces\Core\ISSPayload.cs" />
@@ -191,6 +194,9 @@
     <Compile Include="Views\Main\SSScreenShotView.xaml.cs">
       <DependentUpon>SSScreenShotView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Selection\SSSelectionWindow.xaml.cs">
+      <DependentUpon>SSSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SSWindowsFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -240,12 +246,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Selection\SSSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
     <Folder Include="ViewModels\Menu\Help\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

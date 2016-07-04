@@ -13,7 +13,7 @@ namespace SS.ShareScreen.Windows
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct MouseHookStruct
+        public struct MouseHookStructLL
         {
             public POINT pt;
             public int mouseData;
@@ -21,7 +21,16 @@ namespace SS.ShareScreen.Windows
             public int time;
             public int dwExtraInfo;
         }
-        
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class MouseHookStruct
+        {
+            public POINT pt;
+            public int hwnd;
+            public int wHitTestCode;
+            public int dwExtraInfo;
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct KeyboardHookStruct
         {
@@ -145,6 +154,7 @@ namespace SS.ShareScreen.Windows
 
         public const int WH_KEYBOARD_LL = 13;
         public const int WH_MOUSE_LL = 14;
+        public const int WH_MOUSE = 7;
 
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;
@@ -171,7 +181,7 @@ namespace SS.ShareScreen.Windows
 
         public delegate IntPtr LowLevelKeyboardProc(int nCode, int wParam, ref KeyboardHookStruct lParam);
 
-        public delegate IntPtr LowLevelMouseProc(int nCode, int wParam, ref MouseHookStruct lParam);
+        public delegate IntPtr LowLevelMouseProc(int nCode, int wParam, ref MouseHookStructLL lParam);
         public  static IntPtr StructToPtr(object obj)
         {
             var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(obj));

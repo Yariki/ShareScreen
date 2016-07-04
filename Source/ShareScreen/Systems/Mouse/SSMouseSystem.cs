@@ -18,7 +18,8 @@ using Point = System.Windows;
 namespace SS.ShareScreen.Systems.Mouse
 {
     [Export(typeof(ISSMouseSystem))]
-    public class SSMouseSystem : SSBaseHookSystem, ISSMouseSystem
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    public sealed class SSMouseSystem : SSBaseHookSystem, ISSMouseSystem
     {
 
         private readonly SSWindowsFunctions.LowLevelMouseProc _proc = MouseHookProc;
@@ -63,7 +64,7 @@ namespace SS.ShareScreen.Systems.Mouse
 
         #region [private]
 
-        private static IntPtr MouseHookProc(int nCode, int wParam, ref SSWindowsFunctions.MouseHookStruct lParam)
+        private static IntPtr MouseHookProc(int nCode, int wParam, ref SSWindowsFunctions.MouseHookStructLL lParam)
         {
 
             if (_oldHwnd != IntPtr.Zero)
