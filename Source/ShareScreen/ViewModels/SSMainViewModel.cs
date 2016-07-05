@@ -12,12 +12,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Windows;
+using MahApps.Metro.Controls;
 using SS.ShareScreen.Core.InteractionManager;
 using SS.ShareScreen.Core.MVVM;
 using SS.ShareScreen.Core.Payload;
 using SS.ShareScreen.Enums;
 using SS.ShareScreen.Extensions;
 using SS.ShareScreen.InteractionProviders;
+using SS.ShareScreen.Interfaces.Controls;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.Main;
@@ -31,12 +33,14 @@ namespace SS.ShareScreen.ViewModels
     public class SSMainViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainViewModel
     {
         private List<ISSScreenShotViewModel> _screenShotList;
+        private ISSSelectionWindow _selectionWindow;
         private ISSSubscribeToken _keyboardToken;
         private ISSSubscribeToken _normalizeToken;
         private ISSSubscribeToken _maximazeToken;
         private ISSSubscribeToken _minimazeToken;
         private ISSSubscribeToken _selectionWindowToken;
-
+        private ISSSubscribeToken _selectionAreaToken;
+        
 
         public SSMainViewModel()
         {
@@ -54,6 +58,7 @@ namespace SS.ShareScreen.ViewModels
                 MouseSystem?.StopSystem();
                 InteractionManager.GetCommand<SSNormalizeMainWindowProvider>().Unsubscribe(_normalizeToken);
                 InteractionManager.GetCommand<SSSelectedWindowProvider>().Unsubscribe(_selectionWindowToken);
+                InteractionManager.GetCommand<SSSelectionRegionProvider>().Unsubscribe(_selectionAreaToken);
             }
             base.Dispose(disposing);
         }
@@ -143,11 +148,12 @@ namespace SS.ShareScreen.ViewModels
                 case eSSMenuCommand.MakeActiveWindow:
                     MakeScreenShotOfSelectedWindow();
                     break;
+                case eSSMenuCommand.MakeRegionScreen:
+                    MakeScreenShotOfSelectedArea();
+                    break;
             }
         }
-
-
-
+        
         private bool CanExecuteManuCommand(object arg)
         {
             return true;
@@ -163,6 +169,7 @@ namespace SS.ShareScreen.ViewModels
             _minimazeToken = InteractionManager.GetCommand<SSMinimizeMainWindowProvider>().Subscribe(OnMinimazeWindow);
             _selectionWindowToken =
                 InteractionManager.GetCommand<SSSelectedWindowProvider>().Subscribe(OnSelectionWindow);
+            _selectionAreaToken = InteractionManager.GetCommand<SSSelectionRegionProvider>().Subscribe(OnSelectionArea);
         }
 
         private void OnSelectionWindow(SSPayload<bool> ssPayload)
@@ -241,5 +248,35 @@ namespace SS.ShareScreen.ViewModels
             InternalWindow.WindowState = WindowState.Minimized;
             MouseSystem.RunSelectingWindow();
         }
+
+        private void MakeScreenShotOfSelectedArea()
+        {
+            InternalWindow.WindowState = WindowState.Minimized;
+            _selectionWindow = Container.GetExportedValue<ISSSelectionWindow>();
+            _selectionWindow?.Show();
+        }
+
+        private void OnSelectionArea(SSPayload<Tuple<bool, Point, Point>> result)
+        {
+            if (result.Value.Item1)
+            {
+                _selectionWindow?.Close();
+                var selectedArea = ScreenShotSystem.GetScreenshotOfSelectedArea(
+                    new System.Drawing.Point((int)result.Value.Item2.X, (int)result.Value.Item2.Y),
+                    new System.Drawing.Point((int)result.Value.Item3.X, (int)result.Value.Item3.Y));
+                var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
+                if (shot.IsNotNull())
+                {
+                    shot.Header = "Selected Area";
+                    shot.SetScreenShot(selectedArea);
+                    ScreenShots.Add(shot);
+                }
+            }
+            InternalWindow.WindowState = WindowState.Normal;
+        }
+
+
+
+
     }//end SSMainViewModel
 }//end namespace ViewModels

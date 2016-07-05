@@ -28,7 +28,7 @@ namespace SS.ShareScreen.Controls
             base.OnRender(dc);
             if (_start.HasValue && _end.HasValue)
             {
-                dc.DrawRectangle(Brushes.Red, new Pen(Brushes.Black,1),new Rect(_start.Value,_end.Value));
+                dc.DrawRectangle(Brushes.Gray, new Pen(Brushes.Black,1),new Rect(_start.Value,_end.Value));
             }
         }
 
@@ -41,7 +41,7 @@ namespace SS.ShareScreen.Controls
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
-            _interactionManager.GetCommand<SSSelectionRegionProvider>().Publish(new SSPayload<Tuple<Point, Point>>(new Tuple<Point, Point>(_start.Value,_end.Value)));
+            _interactionManager.GetCommand<SSSelectionRegionProvider>().Publish(new SSPayload<Tuple<bool,Point, Point>>(new Tuple<bool,Point, Point>(true,_start.Value,_end.Value)));
         }
 
 

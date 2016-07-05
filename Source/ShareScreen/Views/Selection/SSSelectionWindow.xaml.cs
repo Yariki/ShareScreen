@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SS.ShareScreen.Controls;
+using SS.ShareScreen.Core.Payload;
+using SS.ShareScreen.InteractionProviders;
 using SS.ShareScreen.Interfaces.Controls;
 using SS.ShareScreen.Interfaces.InteractionManager;
 
@@ -26,6 +28,7 @@ namespace SS.ShareScreen.Views.Selection
     public partial class SSSelectionWindow : Window, ISSSelectionWindow
     {
         private SSSelectionCanvas _canvas;
+        private ISSInteractionManager _interactionManager;
 
         [ImportingConstructor]
         public SSSelectionWindow([Import(typeof(ISSInteractionManager))]ISSInteractionManager InteractionManager)
@@ -34,6 +37,8 @@ namespace SS.ShareScreen.Views.Selection
             _canvas = new SSSelectionCanvas(InteractionManager);
             RootGrid.Children.Add(_canvas);
             this.KeyDown += OnKeyDown;
+            _interactionManager = InteractionManager;
+            Topmost = true;
         }
 
         public override void OnApplyTemplate()
@@ -50,6 +55,7 @@ namespace SS.ShareScreen.Views.Selection
             {
                 case Key.Escape:
                     this.KeyDown -= OnKeyDown;
+                    _interactionManager.GetCommand<SSSelectionRegionProvider>().Publish(new SSPayload<Tuple<bool, Point, Point>>(new Tuple<bool, Point, Point>(false,default(Point),default(Point))));
                     Close();
                     break;
             }

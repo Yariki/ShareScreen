@@ -36,7 +36,15 @@ namespace SS.ShareScreen.Systems.Screenshot
 
         public Bitmap GetScreenshotOfSelectedArea(Point leftTop, Point bottomRight)
         {
-            throw new NotImplementedException();
+            Contract.Requires(leftTop != default(Point));
+            Contract.Requires(bottomRight != default(Point));
+            var bound = new Rectangle(leftTop.X < bottomRight.X ? leftTop.X : bottomRight.X ,leftTop.Y < bottomRight.Y ? leftTop.Y : bottomRight.Y, Math.Abs(bottomRight.X - leftTop.X), Math.Abs(bottomRight.Y - leftTop.Y));
+            var result = new Bitmap(bound.Width,bound.Height);
+            using (var graphics = Graphics.FromImage(result))
+            {
+                graphics.CopyFromScreen(new Point(bound.X,bound.Y), Point.Empty, bound.Size);
+            }
+            return result;
         }
 
         public Bitmap GetScreenshtOfSelectedWindow(IntPtr handle)

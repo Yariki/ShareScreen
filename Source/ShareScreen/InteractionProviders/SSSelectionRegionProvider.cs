@@ -5,7 +5,7 @@ using SS.ShareScreen.Core.Payload;
 
 namespace SS.ShareScreen.InteractionProviders
 {
-    public class SSSelectionRegionProvider : SSCommandProvider<SSPayload<Tuple<Point,Point>>>
+    public class SSSelectionRegionProvider : SSCommandProvider<SSPayload<Tuple<bool,Point,Point>>>
     {
     }
 }
