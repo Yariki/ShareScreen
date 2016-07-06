@@ -236,5 +236,11 @@ namespace SS.ShareScreen.Windows
         [DllImport("gdi32.dll")]
         public static extern bool Rectangle(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetCapture(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
     }
 }

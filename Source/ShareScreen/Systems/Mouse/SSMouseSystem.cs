@@ -2,12 +2,15 @@
 using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 using System.Windows.Media;
 using SS.ShareScreen.Core.Payload;
 using SS.ShareScreen.Core.Systems;
 using SS.ShareScreen.Enums;
 using SS.ShareScreen.Extensions;
 using SS.ShareScreen.InteractionProviders;
+using SS.ShareScreen.Interfaces.Controls;
+using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.System;
 using SS.ShareScreen.Windows;
 using Color = System.Drawing.Color;
@@ -26,16 +29,35 @@ namespace SS.ShareScreen.Systems.Mouse
         private static IntPtr _selectedWindow;
         private static IntPtr _oldHwnd;
         private static eScreenshotType _screenshotType = eScreenshotType.None;
-        
+        private ISSSelectionWindow _selectionWindow;
+        private ISSSubscribeToken _selctionAreaToken;
+        private Point.Point pt1;
+        private Point.Point pt2;
+
+
         [ImportingConstructor]
         public SSMouseSystem()
             : base()
         {
         }
 
+
+        public override void StartSystem()
+        {
+            base.StartSystem();
+            _selctionAreaToken = InteractionManager.GetCommand<SSSelectionRegionProvider>().Subscribe(OnSelectionArea);
+        }
+        
+
+        public override void StopSystem()
+        {
+            base.StopSystem();
+            InteractionManager.GetCommand<SSSelectionRegionProvider>().Unsubscribe(_selctionAreaToken);
+        }
+
         public Tuple<Point.Point, Point.Point> GetSelectedArea()
         {
-            return default(Tuple<Point.Point, Point.Point>);
+            return new Tuple<Point.Point, Point.Point>(pt1,pt2);
         }
 
         public IntPtr GetSelectedWindow()
@@ -43,14 +65,17 @@ namespace SS.ShareScreen.Systems.Mouse
             return _selectedWindow;
         }
 
-        public void RunSelectingWindow()
+        public void RunSelectingWindow(IntPtr mainHwnd)
         {
+            _selectedWindow = IntPtr.Zero;
             _screenshotType = eScreenshotType.SelectedWindow;
         }
 
         public void RunSelectingArea()
         {
             _screenshotType = eScreenshotType.SelectedArea;
+            _selectionWindow = Container.GetExportedValue<ISSSelectionWindow>();
+            _selectionWindow?.Show();
         }
 
         public void ResetCurrentAction()
@@ -63,6 +88,21 @@ namespace SS.ShareScreen.Systems.Mouse
         protected override int GetHookType() => SSWindowsFunctions.WH_MOUSE_LL;
 
         #region [private]
+
+        private void OnSelectionArea(SSPayload<Tuple<bool, Point.Point, Point.Point>> ssPayload)
+        {
+            if (ssPayload.Value.Item1)
+            {
+                _selectionWindow.Close();
+                pt1 = ssPayload.Value.Item2;
+                pt2 = ssPayload.Value.Item3;
+                InteractionManager.GetCommand<SSSelectionRegionFinished>().Publish(new SSPayload<bool>(true));
+            }
+            else
+            {
+                InteractionManager.GetCommand<SSSelectionRegionFinished>().Publish(new SSPayload<bool>(false));
+            }
+        }
 
         private static IntPtr MouseHookProc(int nCode, int wParam, ref SSWindowsFunctions.MouseHookStructLL lParam)
         {

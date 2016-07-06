@@ -33,7 +33,7 @@ namespace SS.ShareScreen.ViewModels
     public class SSMainViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainViewModel
     {
         private List<ISSScreenShotViewModel> _screenShotList;
-        private ISSSelectionWindow _selectionWindow;
+        
         private ISSSubscribeToken _keyboardToken;
         private ISSSubscribeToken _normalizeToken;
         private ISSSubscribeToken _maximazeToken;
@@ -58,7 +58,7 @@ namespace SS.ShareScreen.ViewModels
                 MouseSystem?.StopSystem();
                 InteractionManager.GetCommand<SSNormalizeMainWindowProvider>().Unsubscribe(_normalizeToken);
                 InteractionManager.GetCommand<SSSelectedWindowProvider>().Unsubscribe(_selectionWindowToken);
-                InteractionManager.GetCommand<SSSelectionRegionProvider>().Unsubscribe(_selectionAreaToken);
+                InteractionManager.GetCommand<SSSelectionRegionFinished>().Unsubscribe(_selectionAreaToken);
             }
             base.Dispose(disposing);
         }
@@ -169,7 +169,7 @@ namespace SS.ShareScreen.ViewModels
             _minimazeToken = InteractionManager.GetCommand<SSMinimizeMainWindowProvider>().Subscribe(OnMinimazeWindow);
             _selectionWindowToken =
                 InteractionManager.GetCommand<SSSelectedWindowProvider>().Subscribe(OnSelectionWindow);
-            _selectionAreaToken = InteractionManager.GetCommand<SSSelectionRegionProvider>().Subscribe(OnSelectionArea);
+            _selectionAreaToken = InteractionManager.GetCommand<SSSelectionRegionFinished>().Subscribe(OnSelectionArea);
         }
 
         private void OnSelectionWindow(SSPayload<bool> ssPayload)
@@ -246,24 +246,23 @@ namespace SS.ShareScreen.ViewModels
         private void MakeScreenShotOfSelectedWindow()
         {
             InternalWindow.WindowState = WindowState.Minimized;
-            MouseSystem.RunSelectingWindow();
+            MouseSystem.RunSelectingWindow(IntPtr.Zero);
         }
 
         private void MakeScreenShotOfSelectedArea()
         {
             InternalWindow.WindowState = WindowState.Minimized;
-            _selectionWindow = Container.GetExportedValue<ISSSelectionWindow>();
-            _selectionWindow?.Show();
+            MouseSystem.RunSelectingArea();
         }
 
-        private void OnSelectionArea(SSPayload<Tuple<bool, Point, Point>> result)
+        private void OnSelectionArea(SSPayload<bool> result)
         {
-            if (result.Value.Item1)
+            if (result.Value)
             {
-                _selectionWindow?.Close();
+                var region = MouseSystem.GetSelectedArea();
                 var selectedArea = ScreenShotSystem.GetScreenshotOfSelectedArea(
-                    new System.Drawing.Point((int)result.Value.Item2.X, (int)result.Value.Item2.Y),
-                    new System.Drawing.Point((int)result.Value.Item3.X, (int)result.Value.Item3.Y));
+                    new System.Drawing.Point((int)region.Item1.X, (int)region.Item1.Y),
+                    new System.Drawing.Point((int)region.Item2.X, (int)region.Item2.Y));
                 var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
                 if (shot.IsNotNull())
                 {

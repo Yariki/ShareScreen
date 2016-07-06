@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics.Contracts;
 using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.System;
@@ -22,13 +23,16 @@ namespace SS.ShareScreen.Core.Systems
         [Import]
         public ISSInteractionManager InteractionManager { get; set; }
 
+        [Import]
+        protected CompositionContainer Container { get; set; }
 
-        public void StartSystem()
+
+        public virtual void StartSystem()
         {
             SetHook();
         }
 
-        public void StopSystem()
+        public virtual void StopSystem()
         {
             ReleaseHook();
         }

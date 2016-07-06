@@ -137,6 +137,7 @@
     <Compile Include="InteractionProviders\SSMinimizeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSNormalizeMainWindowProvider.cs" />
     <Compile Include="InteractionProviders\SSSelectedWindowProvider.cs" />
+    <Compile Include="InteractionProviders\SSSelectionRegionFinished.cs" />
     <Compile Include="InteractionProviders\SSSelectionRegionProvider.cs" />
     <Compile Include="Interfaces\Controls\ISSSelectionWindow.cs" />
     <Compile Include="Interfaces\Core\ISSMenuItemViewModel.cs" />
