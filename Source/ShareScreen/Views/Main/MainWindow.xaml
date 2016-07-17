@@ -17,7 +17,7 @@
       </Grid.RowDefinitions>
       <ContentControl x:Name="ShareScreenMenu" Grid.Row="0" Content="{Binding MenuViewModel.View}">
       </ContentControl>
-      <TabControl Grid.Row="1" ItemsSource="{Binding ScreenShots,UpdateSourceTrigger=PropertyChanged}" >
+        <TabControl Grid.Row="1" ItemsSource="{Binding ScreenShots}" SelectedItem="{Binding SelectedScreenShot,UpdateSourceTrigger=PropertyChanged}">
           <TabControl.ItemTemplate>
               <DataTemplate>
                   <TextBlock Text="{Binding Header}"></TextBlock>

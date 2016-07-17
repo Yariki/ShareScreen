@@ -4,9 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SS.ShareScreen.Views.Main"
+             xmlns:controls="clr-namespace:SS.ShareScreen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Image Source="{Binding ImageSource,UpdateSourceTrigger=PropertyChanged}" ></Image>        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ToolBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"> </ToolBar>
+        
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    >
+            <TextBlock Text="{Binding Scale,StringFormat={}{0:#,#.0},UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <Slider
+                Minimum="0.1" 
+                Maximum="5" 
+                Value="{Binding Scale,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
+                Height="150" 
+                Width="25" 
+                TickPlacement="BottomRight" 
+                Orientation="Vertical"
+                VerticalAlignment="Top"></Slider>
+        </StackPanel>
+        
+        
+        <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <controls:SSScreenShotCanvas ScreenShot="{Binding ImageSource,UpdateSourceTrigger=PropertyChanged}" 
+                                         Scale="{Binding Scale,UpdateSourceTrigger=PropertyChanged}"></controls:SSScreenShotCanvas>
+        </ScrollViewer>
     </Grid>
 </UserControl>

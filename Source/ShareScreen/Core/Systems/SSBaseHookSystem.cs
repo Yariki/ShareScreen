@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.System;
@@ -41,8 +42,11 @@ namespace SS.ShareScreen.Core.Systems
         {
             Contract.Requires(GetHookType() > 0);
             Contract.Requires(GetCallback() != null);
-            IntPtr ptrUser = SSWindowsFunctions.LoadLibrary("User32");
-            _hhook = SSWindowsFunctions.SetWindowsHookEx(GetHookType(),GetCallback(),ptrUser,0);
+            //IntPtr ptrUser = SSWindowsFunctions.LoadLibrary("User32");
+            using (ProcessModule module = Process.GetCurrentProcess().MainModule)
+            {
+                _hhook = SSWindowsFunctions.SetWindowsHookEx(GetHookType(), GetCallback(), SSWindowsFunctions.GetModuleHandle(module.ModuleName), 0);
+            }
         }
 
         private void ReleaseHook()

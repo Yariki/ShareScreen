@@ -116,6 +116,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SSScreenShotCanvas.cs" />
     <Compile Include="Controls\SSSelectionCanvas.cs" />
     <Compile Include="Core\Command\SSCommand.cs" />
     <Compile Include="Core\InteractionManager\SSBaseCommandProvider.cs" />

@@ -25,6 +25,13 @@ namespace SS.ShareScreen.ViewModels
     {
         public SSScreenShotViewModel()
         {
+            Scale = 1.0;
+        }
+
+        public double Scale
+        {
+            set { Set(() => Scale, value); }
+            get { return Get(() => Scale); }
         }
 
         public string Header

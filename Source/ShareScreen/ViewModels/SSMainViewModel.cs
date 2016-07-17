@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
+using System.Drawing;
 using System.Windows;
 using MahApps.Metro.Controls;
 using SS.ShareScreen.Core.InteractionManager;
@@ -33,14 +34,14 @@ namespace SS.ShareScreen.ViewModels
     public class SSMainViewModel : SSUIBaseViewModel<ISSMainView>, ISSMainViewModel
     {
         private List<ISSScreenShotViewModel> _screenShotList;
-        
+
         private ISSSubscribeToken _keyboardToken;
         private ISSSubscribeToken _normalizeToken;
         private ISSSubscribeToken _maximazeToken;
         private ISSSubscribeToken _minimazeToken;
         private ISSSubscribeToken _selectionWindowToken;
         private ISSSubscribeToken _selectionAreaToken;
-        
+
 
         public SSMainViewModel()
         {
@@ -135,6 +136,12 @@ namespace SS.ShareScreen.ViewModels
         }
 
 
+        public ISSScreenShotViewModel SelectedScreenShot
+        {
+            set { Set(() => SelectedScreenShot, value); }
+            get { return Get(() => SelectedScreenShot); }
+        }
+
         private void ExecuteMenuCommand(object arg)
         {
             Contract.Ensures(arg is SSMenuItemViewModel);
@@ -153,7 +160,7 @@ namespace SS.ShareScreen.ViewModels
                     break;
             }
         }
-        
+
         private bool CanExecuteManuCommand(object arg)
         {
             return true;
@@ -180,13 +187,7 @@ namespace SS.ShareScreen.ViewModels
                 var selectedWindow = MouseSystem.GetSelectedWindow();
                 System.Diagnostics.Debug.WriteLine(string.Format("SelectedWindow: {0}", selectedWindow));
                 var activeWnd = ScreenShotSystem.GetScreenshtOfSelectedWindow(selectedWindow);
-                var activeShot = Container.GetExportedValue<ISSScreenShotViewModel>();
-                if (activeShot.IsNotNull())
-                {
-                    activeShot.Header = "Selected Window";
-                    activeShot.SetScreenShot(activeWnd);
-                    ScreenShots.Add(activeShot);
-                }
+                AddScreenShot(activeWnd);
 
             }
             else
@@ -222,6 +223,7 @@ namespace SS.ShareScreen.ViewModels
                     MakeScreenShot();
                     break;
                 case eScreenshotType.SelectedArea:
+                    MakeScreenShotOfSelectedArea();
                     break;
                 case eScreenshotType.SelectedWindow:
                     MakeScreenShotOfSelectedWindow();
@@ -231,15 +233,17 @@ namespace SS.ShareScreen.ViewModels
 
         private void MakeScreenShot()
         {
-            InternalWindow.WindowState = WindowState.Minimized;
-            var screen = ScreenShotSystem.GetScreenshot();
-            InternalWindow.WindowState = WindowState.Normal;
-            var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
-            if (shot.IsNotNull())
+            try
             {
-                shot.Header = "Screen Shot";
-                shot.SetScreenShot(screen);
-                ScreenShots.Add(shot);
+                InternalWindow.WindowState = WindowState.Minimized;
+                var screen = ScreenShotSystem.GetScreenshot();
+                InternalWindow.WindowState = WindowState.Normal;
+                AddScreenShot(screen);
+                MouseSystem.ResetCurrentAction();
+            }
+            catch( Exception ex )
+	        {
+                Logger.Error(ex.ToString());
             }
         }
 
@@ -257,23 +261,39 @@ namespace SS.ShareScreen.ViewModels
 
         private void OnSelectionArea(SSPayload<bool> result)
         {
-            if (result.Value)
+            try
             {
-                var region = MouseSystem.GetSelectedArea();
-                var selectedArea = ScreenShotSystem.GetScreenshotOfSelectedArea(
-                    new System.Drawing.Point((int)region.Item1.X, (int)region.Item1.Y),
-                    new System.Drawing.Point((int)region.Item2.X, (int)region.Item2.Y));
-                var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
-                if (shot.IsNotNull())
+                if (result.Value)
                 {
-                    shot.Header = "Selected Area";
-                    shot.SetScreenShot(selectedArea);
-                    ScreenShots.Add(shot);
+                    var region = MouseSystem.GetSelectedArea();
+                    var selectedArea = ScreenShotSystem.GetScreenshotOfSelectedArea(
+                        new System.Drawing.Point((int)region.Item1.X, (int)region.Item1.Y),
+                        new System.Drawing.Point((int)region.Item2.X, (int)region.Item2.Y));
+                    AddScreenShot(selectedArea);
+
                 }
+                InternalWindow.WindowState = WindowState.Normal;
+                MouseSystem.ResetCurrentAction();
             }
-            InternalWindow.WindowState = WindowState.Normal;
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
         }
 
+
+        private void AddScreenShot(Bitmap screenshot)
+        {
+            Contract.Requires(screenshot != null);
+            var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
+            if (shot.IsNotNull())
+            {
+                shot.Header = "ScreenShot";
+                shot.SetScreenShot(screenshot);
+                ScreenShots.Add(shot);
+                SelectedScreenShot = shot;
+            }
+        }
 
 
 
