@@ -58,8 +58,8 @@ namespace SS.ShareScreen
 
         private void OnClosed(object sender, EventArgs eventArgs)
         {
-            _mainViewModel.Dispose();
             (_mainViewModel.View as Window).Closed -= OnClosed;
+            _mainViewModel.Dispose();
         }
     }
     

@@ -11,7 +11,7 @@ namespace SS.ShareScreen.Core.Systems
 {
     public abstract class SSBaseHookSystem : ISSSystem
     {
-        private static IntPtr _hhook = IntPtr.Zero;
+        protected static IntPtr _hhook = IntPtr.Zero;
 
         private static SSBaseHookSystem _this;
 

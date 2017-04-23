@@ -1,0 +1,16 @@
+﻿<Window x:Class="SS.ShareScreen.Views.Hightlight.SSHighlightWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SS.ShareScreen.Views.Hightlight"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        IsHitTestVisible="False"
+        AllowsTransparency="True"
+        Opacity="0.5"
+        Topmost="True">
+    <Grid>
+        <Border Background="Transparent" BorderBrush="Red" BorderThickness="3"></Border>
+    </Grid>
+</Window>

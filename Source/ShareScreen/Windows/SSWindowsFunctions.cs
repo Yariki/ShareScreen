@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace SS.ShareScreen.Windows
 {
@@ -45,6 +46,11 @@ namespace SS.ShareScreen.Windows
         public struct RECT
         {
             public int Left, Top, Right, Bottom;
+
+            public override string ToString()
+            {
+                return $"Left({Left}); Top({Top}); Right({Right}); Bottom({Bottom})";
+            }
         }
 
         public enum PenStyle : int
@@ -166,7 +172,10 @@ namespace SS.ShareScreen.Windows
         public const int WM_MOUSEMOVE = 0x0200;
         public const int WM_RBUTTONDOWN = 0x0204;
         public const int WM_RBUTTONUP = 0x0205;
-        
+
+        const int WS_EX_TRANSPARENT = 0x00000020;
+        const int GWL_EXSTYLE = (-20);
+
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(int idHook, Delegate callback, IntPtr hInstance, uint threadId);
 
@@ -200,7 +209,13 @@ namespace SS.ShareScreen.Windows
                 | SSWindowsFunctions.RedrawWindowFlags.AllChildren);
         }
 
-
+        public static string GetText(IntPtr hWnd)
+        {
+            int length = GetWindowTextLength(hWnd);
+            StringBuilder sb = new StringBuilder(length + 1);
+            GetWindowText(hWnd, sb, sb.Capacity);
+            return sb.ToString();
+        }
 
 
         [DllImport("user32.dll")]
@@ -217,6 +232,12 @@ namespace SS.ShareScreen.Windows
 
         [DllImport("user32.dll")]
         public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetWindowTextLength(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         public static extern bool UpdateWindow(IntPtr hWnd);
@@ -244,6 +265,28 @@ namespace SS.ShareScreen.Windows
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool PostThreadMessage(uint threadId, uint msg, UIntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll")]
+        public static extern int GetCurrentThreadId();
+
+        [DllImport("user32.dll")]
+        public static extern int GetMessage(out uint lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowLong(IntPtr hwnd, int index);
+
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+
+        public static void SetWindowExTransparent(IntPtr hwnd)
+        {
+            var extendedStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+            SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT);
+        }
 
     }
 }

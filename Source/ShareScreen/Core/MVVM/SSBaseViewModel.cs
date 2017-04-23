@@ -24,13 +24,12 @@ namespace SS.ShareScreen.Core.MVVM
 {
     public class SSBaseViewModel : ISSViewModel
     {
-        private IDictionary<string, object> _values;
+        private IDictionary<string, object> _values = new Dictionary<string, object>();
         private ISSLogger _logger;
         protected bool Disposed = false;
 
         public SSBaseViewModel()
         {
-            _values = new Dictionary<string, object>();
         }
 
         ~SSBaseViewModel()

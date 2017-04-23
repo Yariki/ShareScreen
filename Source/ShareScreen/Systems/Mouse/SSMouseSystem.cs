@@ -1,9 +1,13 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
+using SS.ShareScreen.Core.InteractionManager;
 using SS.ShareScreen.Core.Payload;
 using SS.ShareScreen.Core.Systems;
 using SS.ShareScreen.Enums;
@@ -12,10 +16,11 @@ using SS.ShareScreen.InteractionProviders;
 using SS.ShareScreen.Interfaces.Controls;
 using SS.ShareScreen.Interfaces.InteractionManager;
 using SS.ShareScreen.Interfaces.System;
+using SS.ShareScreen.Views.Hightlight;
 using SS.ShareScreen.Windows;
 using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
-using Point = System.Windows;
+using WindowsApplication = System.Windows;
 
 
 namespace SS.ShareScreen.Systems.Mouse
@@ -31,33 +36,57 @@ namespace SS.ShareScreen.Systems.Mouse
         private static eScreenshotType _screenshotType = eScreenshotType.None;
         private ISSSelectionWindow _selectionWindow;
         private ISSSubscribeToken _selctionAreaToken;
-        private Point.Point pt1;
-        private Point.Point pt2;
+        private WindowsApplication.Point pt1;
+        private WindowsApplication.Point pt2;
+        private Thread _mouseHookThread;
+        private uint _mouseHookThreadId;
+        private static Dispatcher _currentDispatcher;
+        private static SSHighlightWindow _highlightWindow;
+
 
 
         [ImportingConstructor]
         public SSMouseSystem()
             : base()
         {
+            _currentDispatcher = Dispatcher.CurrentDispatcher;
+            _highlightWindow = new SSHighlightWindow();
         }
 
 
         public override void StartSystem()
         {
-            base.StartSystem();
+            _mouseHookThread = new Thread(() =>
+            {
+                _mouseHookThreadId = (uint)SSWindowsFunctions.GetCurrentThreadId();
+                using (ProcessModule module = Process.GetCurrentProcess().MainModule)
+                {
+                    _hhook = SSWindowsFunctions.SetWindowsHookEx(GetHookType(), GetCallback(), SSWindowsFunctions.GetModuleHandle(module.ModuleName), 0);
+                }
+                uint msg;
+                SSWindowsFunctions.GetMessage(out msg, IntPtr.Zero, 0, 0);
+            });
+            _mouseHookThread.IsBackground = true;
+            _mouseHookThread.Start();
             _selctionAreaToken = InteractionManager.GetCommand<SSSelectionRegionProvider>().Subscribe(OnSelectionArea);
         }
         
 
         public override void StopSystem()
         {
-            base.StopSystem();
+            SSWindowsFunctions.UnhookWindowsHookEx(_hhook);
+            if (_mouseHookThread != null)
+            {
+                SSWindowsFunctions.PostThreadMessage(_mouseHookThreadId, 0, UIntPtr.Zero, IntPtr.Zero);
+                _mouseHookThread = null;
+                _mouseHookThreadId = 0;
+            }
             InteractionManager.GetCommand<SSSelectionRegionProvider>().Unsubscribe(_selctionAreaToken);
         }
 
-        public Tuple<Point.Point, Point.Point> GetSelectedArea()
+        public Tuple<WindowsApplication.Point, WindowsApplication.Point> GetSelectedArea()
         {
-            return new Tuple<Point.Point, Point.Point>(pt1,pt2);
+            return new Tuple<WindowsApplication.Point, WindowsApplication.Point>(pt1,pt2);
         }
 
         public IntPtr GetSelectedWindow()
@@ -89,7 +118,7 @@ namespace SS.ShareScreen.Systems.Mouse
 
         #region [private]
 
-        private void OnSelectionArea(SSPayload<Tuple<bool, Point.Point, Point.Point>> ssPayload)
+        private void OnSelectionArea(SSPayload<Tuple<bool, WindowsApplication.Point, WindowsApplication.Point>> ssPayload)
         {
             if (ssPayload.Value.Item1)
             {
@@ -107,26 +136,25 @@ namespace SS.ShareScreen.Systems.Mouse
         private static IntPtr MouseHookProc(int nCode, int wParam, ref SSWindowsFunctions.MouseHookStructLL lParam)
         {
 
-            if (_oldHwnd != IntPtr.Zero)
-            {
-                SSWindowsFunctions.RefreshWindow(_oldHwnd);
-                _oldHwnd = IntPtr.Zero;
-            }
-
             if (nCode >= 0)
             {
                 switch (_screenshotType)
                 {
                     case eScreenshotType.SelectedWindow:
+                        
                         var pt = new SSWindowsFunctions.POINT() {x= lParam.pt.x, y = lParam.pt.y};
                         _selectedWindow = SSWindowsFunctions.WindowFromPoint(pt);
-                        if (_selectedWindow != IntPtr.Zero)
+                        _currentDispatcher.BeginInvoke((Action) (() =>
                         {
-                            HighlightingCurrentWindow(_selectedWindow);
+                            if (_selectedWindow != IntPtr.Zero && _selectedWindow != _oldHwnd)
+                            {
+                                HighlightingCurrentWindow(_selectedWindow);
+                                var textOFSelectedWindow = SSWindowsFunctions.GetText(_selectedWindow);
+                                System.Diagnostics.Debug.WriteLine($"Selected window {textOFSelectedWindow}...");
+                                _oldHwnd = _selectedWindow;
+                            }
                             ProcessSelectingWindow(wParam);
-                            _oldHwnd = _selectedWindow;
-                        }
-
+                        }));
                         break;
                     case eScreenshotType.SelectedArea:
                         break;
@@ -139,34 +167,41 @@ namespace SS.ShareScreen.Systems.Mouse
         {
             if (wParam == SSWindowsFunctions.WM_LBUTTONDOWN)
             {
-                ((SSBaseHookSystem) GetHookSystem()).InteractionManager.GetCommand<SSSelectedWindowProvider>()
-                    .Publish(new SSPayload<bool>(true));
+                _currentDispatcher.BeginInvoke((Action)(() =>
+                {
+                    ((SSBaseHookSystem)GetHookSystem()).InteractionManager.GetCommand<SSSelectedWindowProvider>()
+                        .Publish(new SSPayload<bool>(true));
+                }));
+                
+                _screenshotType = eScreenshotType.None;
+                _oldHwnd = IntPtr.Zero;
+               _highlightWindow.Hide();
             }
             else if (wParam == SSWindowsFunctions.WM_RBUTTONDOWN)
             {
-                ((SSBaseHookSystem) GetHookSystem()).InteractionManager.GetCommand<SSSelectedWindowProvider>()
-                    .Publish(new SSPayload<bool>(false));
+                _currentDispatcher.BeginInvoke((Action) (() =>
+                {
+                    ((SSBaseHookSystem) GetHookSystem()).InteractionManager.GetCommand<SSSelectedWindowProvider>()
+                        .Publish(new SSPayload<bool>(false));
+                }));
                 _screenshotType = eScreenshotType.None;
+                _oldHwnd = IntPtr.Zero;
+                _highlightWindow.Hide();
             }
+            
         }
 
         private static void HighlightingCurrentWindow(IntPtr hWnd)
         {
             SSWindowsFunctions.RECT rc = new SSWindowsFunctions.RECT();
-
             SSWindowsFunctions.GetWindowRect(hWnd, out rc);
-            var hDC = SSWindowsFunctions.GetWindowDC(hWnd);
-
-            if (hDC != IntPtr.Zero)
-            {
-                using (var graphics = Graphics.FromHdc(hDC))
-                {
-                    var pen = new Pen(Color.Red,3);
-                    graphics.DrawRectangle(pen,0,0, rc.Right - rc.Left,rc.Bottom - rc.Top);
-                }
-                SSWindowsFunctions.ReleaseDC(hWnd, hDC);
-            }
-            
+            _highlightWindow.Left = rc.Left;
+            _highlightWindow.Top = rc.Top;
+            _highlightWindow.Width = rc.Right - rc.Left;
+            _highlightWindow.Height = rc.Bottom - rc.Top;
+            Debug.WriteLine($"Selected rec = {rc}");
+            Debug.WriteLine($"Left:{_highlightWindow.Left} Top:{_highlightWindow.Top} Width:{_highlightWindow.Width} Height:{_highlightWindow.Height}");
+            _highlightWindow.Show();
         }
 
         
