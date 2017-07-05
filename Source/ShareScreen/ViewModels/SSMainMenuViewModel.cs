@@ -53,6 +53,8 @@ namespace SS.ShareScreen.ViewModels
                         new SSActiveWindowMenuItem(executeAction,canExecuteAction)
                     }
                 },
+                new SSSaveMenuItem(executeAction,canExecuteAction),
+                new SSSaveAsMenuItem(executeAction,canExecuteAction),
                 new SSCloseMenuItem(executeAction,canExecuteAction)
             };
             

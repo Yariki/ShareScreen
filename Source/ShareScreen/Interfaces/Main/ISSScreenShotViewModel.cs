@@ -15,5 +15,10 @@ namespace SS.ShareScreen.Interfaces.Main
     {
         void SetScreenShot(Bitmap screenShot);
         string Header { set; get; }
+
+        void Save(string filename);
+
+        void SaveAs();
+
     }//end ISSScreenShotViewModel
 }//end namespace Main

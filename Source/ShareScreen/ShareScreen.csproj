@@ -131,6 +131,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Selectors\SSMenuItemTemplateSelector.cs" />
     <Compile Include="Controls\SSScreenShotCanvas.cs" />
     <Compile Include="Controls\SSSelectionCanvas.cs" />
     <Compile Include="Core\Command\SSCommand.cs" />
@@ -194,7 +195,10 @@
     <Compile Include="ViewModels\Menu\File\SSCloseMenuItem.cs" />
     <Compile Include="ViewModels\Menu\File\SSMakeAllScreenMenuItem.cs" />
     <Compile Include="ViewModels\Menu\File\SSMakeRegionScreenMenuItem.cs" />
+    <Compile Include="ViewModels\Menu\File\SSSaveAsMenuItem.cs" />
+    <Compile Include="ViewModels\Menu\File\SSSaveMenuItem.cs" />
     <Compile Include="ViewModels\Menu\File\SSScreeShotMenuItem.cs" />
+    <Compile Include="ViewModels\Menu\File\SSSeparatorMenuItem.cs" />
     <Compile Include="ViewModels\SSMainMenuViewModel.cs" />
     <Compile Include="ViewModels\SSMainViewModel.cs" />
     <Compile Include="ViewModels\SSScreenShotViewModel.cs" />

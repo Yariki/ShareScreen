@@ -41,6 +41,8 @@ namespace SS.ShareScreen.ViewModels
         private ISSSubscribeToken _minimazeToken;
         private ISSSubscribeToken _selectionWindowToken;
         private ISSSubscribeToken _selectionAreaToken;
+        private static string ScreenshotName = "Screenshot";
+        private int SaveNumber = 1;
 
 
         public SSMainViewModel()
@@ -158,6 +160,18 @@ namespace SS.ShareScreen.ViewModels
                 case eSSMenuCommand.MakeRegionScreen:
                     MakeScreenShotOfSelectedArea();
                     break;
+                case eSSMenuCommand.Save:
+                    if (SelectedScreenShot.IsNotNull())
+                    {
+                        SelectedScreenShot.Save($"{ScreenshotName}{SaveNumber++}");
+                    }
+                    break;
+                case eSSMenuCommand.SaveAs:
+                    if (SelectedScreenShot.IsNotNull())
+                    {
+                        SelectedScreenShot.SaveAs();
+                    }
+                    break;
             }
         }
 
@@ -241,8 +255,8 @@ namespace SS.ShareScreen.ViewModels
                 AddScreenShot(screen);
                 MouseSystem.ResetCurrentAction();
             }
-            catch( Exception ex )
-	        {
+            catch (Exception ex)
+            {
                 Logger.Error(ex.ToString());
             }
         }
@@ -288,7 +302,7 @@ namespace SS.ShareScreen.ViewModels
             var shot = Container.GetExportedValue<ISSScreenShotViewModel>();
             if (shot.IsNotNull())
             {
-                shot.Header = "ScreenShot";
+                shot.Header = ScreenshotName;
                 shot.SetScreenShot(screenshot);
                 ScreenShots.Add(shot);
                 SelectedScreenShot = shot;

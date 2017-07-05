@@ -10,6 +10,7 @@ namespace SS.ShareScreen.Enums
 {
     public enum eSSMenuCommand : int
     {
+        None,
         Close,
         ScreenShot,
         About,
@@ -17,6 +18,8 @@ namespace SS.ShareScreen.Enums
         MakeAllScreen,
         MakeRegionScreen,
         MakeActiveWindow,
+        Save,
+        SaveAs
 
     }//end eSSMenuCommand
 }//end namespace Enums

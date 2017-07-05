@@ -18,6 +18,8 @@ namespace SS.ShareScreen.Core.MVVM
         public bool IsParent { get; protected set; }
         public virtual IEnumerable<ISSMenuItemViewModel> SubItems { get; set; }
         public string UIName => GetUIName();
+        public bool IsSeparator => GetIsSeparator();
+
 
         public SSMenuItemViewModel(Action<object> execute, Func<object,bool> canExecute )
         {
@@ -30,6 +32,8 @@ namespace SS.ShareScreen.Core.MVVM
         protected virtual string GetIcon() => "";
 
         protected virtual string GetUIName() => "";
+
+        protected virtual bool GetIsSeparator() => false;
 
         public bool CanExecute(object parameter)
         {

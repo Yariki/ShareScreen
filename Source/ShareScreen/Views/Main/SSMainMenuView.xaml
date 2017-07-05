@@ -4,21 +4,34 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SS.ShareScreen.Views.Main"
-             xmlns:mvvm="clr-namespace:SS.ShareScreen.Core.MVVM">
-  <UserControl.Resources>
-    <HierarchicalDataTemplate x:Key="MenuItemDataTemplate"  ItemsSource="{Binding SubItems}">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="16"></ColumnDefinition>
-          <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-      <!--<Image Grid.Column="0" Source="{Binding Icon}"></Image>-->      
-      <TextBlock Grid.Column="1" Text="{Binding UIName}"></TextBlock>
-      </Grid>
-    </HierarchicalDataTemplate> 
-  </UserControl.Resources>
+             xmlns:mvvm="clr-namespace:SS.ShareScreen.Core.MVVM"
+             xmlns:selectors="clr-namespace:SS.ShareScreen.Controls.Selectors">
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="MenuItemTemplate">
+            <TextBlock Grid.Column="1" Text="{Binding UIName}"></TextBlock>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="SeparatorItemTemplate">
+            <Separator></Separator>
+        </DataTemplate>
+
+        <selectors:SSMenuItemTemplateSelector x:Key="MenuItemTemplateSelector" MenuItem="{StaticResource MenuItemTemplate}" SeparatorItem="{StaticResource SeparatorItemTemplate}"></selectors:SSMenuItemTemplateSelector>
+
+        <HierarchicalDataTemplate x:Key="MenuItemDataTemplate"  ItemsSource="{Binding SubItems}" ItemTemplateSelector="{StaticResource MenuItemTemplateSelector}"  >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--<Image Grid.Column="0" Source="{Binding Icon}"></Image>-->
+                <TextBlock Grid.Column="1" Text="{Binding UIName}"></TextBlock>
+            </Grid>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
     <Menu ItemTemplate="{StaticResource MenuItemDataTemplate}">
-      <MenuItem Header="File" ItemsSource="{Binding  File}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
-      <MenuItem Header="Help" ItemsSource="{Binding  Help}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
+        <MenuItem Header="File" ItemsSource="{Binding  File}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
+        <MenuItem Header="Help" ItemsSource="{Binding  Help}" ItemTemplate="{StaticResource MenuItemDataTemplate}"></MenuItem>
     </Menu>
 </UserControl>

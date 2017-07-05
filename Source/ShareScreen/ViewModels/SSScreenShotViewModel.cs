@@ -10,12 +10,17 @@ using System;
 using System.ComponentModel.Composition;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SS.ShareScreen.Core.MVVM;
+using SS.ShareScreen.Extensions;
 using SS.ShareScreen.Interfaces.Core;
 using SS.ShareScreen.Interfaces.Main;
+using SS.ShareScreen.Logger;
 
 namespace SS.ShareScreen.ViewModels
 {
@@ -23,6 +28,8 @@ namespace SS.ShareScreen.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SSScreenShotViewModel : SSUIBaseViewModel<ISSScreenShotView>, ISSScreenShotViewModel
     {
+        private static string FILTER = "*.png|*.png|*.jpg|*.jpg|*.bmp|*.bmp";
+
         public SSScreenShotViewModel()
         {
             Scale = 1.0;
@@ -38,6 +45,55 @@ namespace SS.ShareScreen.ViewModels
         {
             set { Set(() => Header, value); }
             get { return Get(() => Header); }
+        }
+
+        public void Save(string filename)
+        {
+            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (folderDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var path = Path.Combine(folderDialog.SelectedPath, filename + ".png");
+                    if (ScreenShot.IsNotNull())
+                    {
+                        ScreenShot.Save(path, ImageFormat.Png);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.ToString());
+                }
+            }
+        }
+
+        public void SaveAs()
+        {
+            var dialog =new System.Windows.Forms.SaveFileDialog();
+            dialog.DefaultExt = "*.png";
+            dialog.Filter = FILTER;
+            if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.FileName))
+            {
+                var ext = Path.GetExtension(dialog.FileName);
+                ImageFormat format = ImageFormat.Png;
+                switch (ext.ToUpperInvariant())
+                {
+                    case ".BMP":
+                        format = ImageFormat.Bmp;
+                        break;
+                    case ".JPG":
+                        format = ImageFormat.Jpeg;
+                        break;
+                }
+                try
+                {
+                    ScreenShot.Save(dialog.FileName, format);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.ToString());
+                }
+            }
         }
 
         public void SetScreenShot(Bitmap screenShot)
