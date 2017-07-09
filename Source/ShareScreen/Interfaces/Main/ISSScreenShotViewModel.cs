@@ -20,5 +20,7 @@ namespace SS.ShareScreen.Interfaces.Main
 
         void SaveAs();
 
+        bool IsSaved { get; }
+
     }//end ISSScreenShotViewModel
 }//end namespace Main

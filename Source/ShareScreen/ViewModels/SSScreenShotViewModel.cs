@@ -33,6 +33,7 @@ namespace SS.ShareScreen.ViewModels
         public SSScreenShotViewModel()
         {
             Scale = 1.0;
+            IsSaved = false;
         }
 
         public double Scale
@@ -58,6 +59,8 @@ namespace SS.ShareScreen.ViewModels
                     if (ScreenShot.IsNotNull())
                     {
                         ScreenShot.Save(path, ImageFormat.Png);
+                        Header = Path.GetFileName(path);
+                        IsSaved = true;
                     }
                 }
                 catch (Exception e)
@@ -88,12 +91,20 @@ namespace SS.ShareScreen.ViewModels
                 try
                 {
                     ScreenShot.Save(dialog.FileName, format);
+                    Header = Path.GetFileName(dialog.FileName);
+                    IsSaved = true;
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e.ToString());
                 }
             }
+        }
+
+        public bool IsSaved
+        {
+            get { return Get(() => IsSaved); }
+            private set { Set(() => IsSaved,value); }
         }
 
         public void SetScreenShot(Bitmap screenShot)
