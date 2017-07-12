@@ -131,6 +131,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Adorners\SSSelectionAdorner.cs" />
     <Compile Include="Controls\Converters\SSBoolToVisibilityConverter.cs" />
     <Compile Include="Controls\Selectors\SSMenuItemTemplateSelector.cs" />
     <Compile Include="Controls\SSScreenShotCanvas.cs" />

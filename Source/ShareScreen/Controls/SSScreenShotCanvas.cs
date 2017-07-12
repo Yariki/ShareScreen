@@ -2,15 +2,21 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using SS.ShareScreen.Controls.Adorners;
 using SS.ShareScreen.Extensions;
 using Size = System.Drawing.Size;
+using Point =  System.Windows.Point;
 
 namespace SS.ShareScreen.Controls
 {
     public class SSScreenShotCanvas : Canvas
     {
 
+        private Point? _start;
+        private bool _moving;
 
         public SSScreenShotCanvas()
         {
@@ -57,6 +63,43 @@ namespace SS.ShareScreen.Controls
                 dc.DrawImage(ScreenShot,new Rect(new System.Windows.Point(0,0), new System.Windows.Size((int)this.Width,(int)this.Height)));
             }
         }
+
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            _start = new Point?(e.GetPosition((IInputElement) this));
+            Focus();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                _start = new Point?();
+            }
+            if (_start.HasValue)
+            {
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this);
+                if (adornerLayer.IsNotNull())
+                {
+                    adornerLayer.Add(new SSSelectionAdorner(this,_start));
+                }
+            }
+            if (e.LeftButton != MouseButtonState.Pressed || _moving)
+            {
+                return;
+            }
+            _moving = true;
+        }
+
+        protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseUp(e);
+            _moving = false;
+        }
+
 
         #region [private]
 
