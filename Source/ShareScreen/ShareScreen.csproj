@@ -133,9 +133,12 @@
     </Compile>
     <Compile Include="Controls\Adorners\SSSelectionAdorner.cs" />
     <Compile Include="Controls\Converters\SSBoolToVisibilityConverter.cs" />
+    <Compile Include="Controls\Core\SSBaseCanvasElement.cs" />
     <Compile Include="Controls\Selectors\SSMenuItemTemplateSelector.cs" />
     <Compile Include="Controls\SSScreenShotCanvas.cs" />
     <Compile Include="Controls\SSSelectionCanvas.cs" />
+    <Compile Include="Controls\Thumbs\SSDragThumb.cs" />
+    <Compile Include="Controls\Thumbs\SSMoveThumb.cs" />
     <Compile Include="Core\Command\SSCommand.cs" />
     <Compile Include="Core\InteractionManager\SSBaseCommandProvider.cs" />
     <Compile Include="Core\InteractionManager\SSCommandProvider.cs" />
@@ -187,6 +190,7 @@
     <Compile Include="Interfaces\System\ISSSystem.cs" />
     <Compile Include="Logger\SSLogger.cs" />
     <Compile Include="Payloads\SSKeyboardPayload.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SSBootstraper.cs" />
     <Compile Include="Systems\Keyboard\SSKeyboardSystem.cs" />
     <Compile Include="Systems\Mouse\SSMouseSystem.cs" />
@@ -255,6 +259,10 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Hightlight\SSHighlightWindow.xaml">
       <SubType>Designer</SubType>
