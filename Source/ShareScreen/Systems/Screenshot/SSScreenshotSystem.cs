@@ -4,8 +4,8 @@ using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using SS.ShareScreen.Interfaces.System;
-using SS.ShareScreen.Windows;
+using ShareScreen.Core.Interfaces.System;
+using ShareScreen.Core.Windows;
 
 namespace SS.ShareScreen.Systems.Screenshot
 {

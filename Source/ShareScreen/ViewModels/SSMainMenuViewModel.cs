@@ -9,9 +9,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using SS.ShareScreen.Core.MVVM;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.Main;
+using ShareScreen.Core.Core.MVVM;
+using ShareScreen.Core.Interfaces.Core;
+using ShareScreen.Core.Interfaces.Main;
 using SS.ShareScreen.ViewModels.Menu.File;
 
 namespace SS.ShareScreen.ViewModels

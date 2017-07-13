@@ -13,8 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.Main;
+using ShareScreen.Core.Interfaces.Core;
+using ShareScreen.Core.Interfaces.Main;
 
 namespace SS.ShareScreen.Views.Main
 {

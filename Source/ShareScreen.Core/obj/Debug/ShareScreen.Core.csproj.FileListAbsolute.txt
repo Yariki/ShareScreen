@@ -1,0 +1,10 @@
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\ShareScreen.Core.dll
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\ShareScreen.Core.pdb
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\NLog.dll
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\SS.PluginCore.dll
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\SS.PluginCore.pdb
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\NLog.xml
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\obj\Debug\ShareScreen.Core.dll
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\obj\Debug\ShareScreen.Core.pdb
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\obj\Debug\ShareScreen.Core.csprojResolveAssemblyReference.cache
+F:\Sources\C#\ShareScreen\Source\ShareScreen.Core\bin\Debug\NLog.config

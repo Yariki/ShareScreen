@@ -12,7 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using SS.ShareScreen.Windows;
+using ShareScreen.Core.Windows;
 
 namespace SS.ShareScreen.Views.Hightlight
 {

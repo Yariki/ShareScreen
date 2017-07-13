@@ -12,8 +12,8 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using SS.ShareScreen.Interfaces.Main;
-using SS.ShareScreen.Logger;
+using ShareScreen.Core.Interfaces.Main;
+using ShareScreen.Core.Logger;
 
 namespace SS.ShareScreen
 {

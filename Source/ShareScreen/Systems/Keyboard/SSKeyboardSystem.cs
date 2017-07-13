@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows.Forms;
-using SS.ShareScreen.Core.Systems;
-using SS.ShareScreen.Enums;
-using SS.ShareScreen.InteractionProviders;
-using SS.ShareScreen.Interfaces.System;
-using SS.ShareScreen.Payloads;
-using SS.ShareScreen.Windows;
+using ShareScreen.Core.Core.Systems;
+using ShareScreen.Core.Enums;
+using ShareScreen.Core.InteractionProviders;
+using ShareScreen.Core.Interfaces.System;
+using ShareScreen.Core.Payloads;
+using ShareScreen.Core.Windows;
 
 namespace SS.ShareScreen.Systems.Keyboard
 {

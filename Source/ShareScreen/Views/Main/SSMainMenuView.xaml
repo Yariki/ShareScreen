@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SS.ShareScreen.Views.Main"
-             xmlns:mvvm="clr-namespace:SS.ShareScreen.Core.MVVM"
-             xmlns:selectors="clr-namespace:SS.ShareScreen.Controls.Selectors">
+             xmlns:selectors="clr-namespace:ShareScreen.Controls.Controls.Selectors;assembly=ShareScreen.Controls">
     <UserControl.Resources>
 
         <DataTemplate x:Key="MenuItemTemplate">

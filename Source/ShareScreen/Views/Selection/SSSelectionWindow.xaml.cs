@@ -12,11 +12,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using SS.ShareScreen.Controls;
-using SS.ShareScreen.Core.Payload;
-using SS.ShareScreen.InteractionProviders;
-using SS.ShareScreen.Interfaces.Controls;
-using SS.ShareScreen.Interfaces.InteractionManager;
+using ShareScreen.Controls.Controls;
+using ShareScreen.Core.Core.Payload;
+using ShareScreen.Core.InteractionProviders;
+using ShareScreen.Core.Interfaces.Controls;
+using ShareScreen.Core.Interfaces.InteractionManager;
 
 namespace SS.ShareScreen.Views.Selection
 {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Drawing;
+using ShareScreen.Core.Interfaces.System;
 using SS.PluginCore.Interfaces;
-using SS.ShareScreen.Interfaces.System;
 
 namespace SS.ShareScreen.Systems.Plugins
 {

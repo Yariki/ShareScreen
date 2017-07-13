@@ -7,9 +7,8 @@
 ///////////////////////////////////////////////////////////
 
 using System.ComponentModel.Composition;
-using SS.ShareScreen.Core.MVVM;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.Main;
+using ShareScreen.Core.Core.MVVM;
+using ShareScreen.Core.Interfaces.Main;
 
 namespace SS.ShareScreen.ViewModels
 {

@@ -15,8 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.Main;
+using ShareScreen.Core.Interfaces.Core;
+using ShareScreen.Core.Interfaces.Main;
 
 namespace SS.ShareScreen.Views.Main
 {

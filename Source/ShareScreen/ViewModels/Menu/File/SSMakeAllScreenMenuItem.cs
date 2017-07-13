@@ -1,6 +1,6 @@
 ﻿using System;
-using SS.ShareScreen.Core.MVVM;
-using SS.ShareScreen.Enums;
+using ShareScreen.Core.Core.MVVM;
+using ShareScreen.Core.Enums;
 
 namespace SS.ShareScreen.ViewModels.Menu.File
 {

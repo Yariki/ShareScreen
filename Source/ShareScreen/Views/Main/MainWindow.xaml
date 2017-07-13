@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:converters="clr-namespace:SS.ShareScreen.Controls.Converters"
+        xmlns:converters="clr-namespace:ShareScreen.Controls.Controls.Converters;assembly=ShareScreen.Controls"
+
         GlowBrush="{StaticResource AccentColorBrush4}"  
         Title="Share Screen">
     

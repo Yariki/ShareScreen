@@ -16,11 +16,9 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using SS.ShareScreen.Core.MVVM;
-using SS.ShareScreen.Extensions;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.Main;
-using SS.ShareScreen.Logger;
+using ShareScreen.Core.Core.MVVM;
+using ShareScreen.Core.Extensions;
+using ShareScreen.Core.Interfaces.Main;
 
 namespace SS.ShareScreen.ViewModels
 {

@@ -14,19 +14,16 @@ using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Windows;
 using MahApps.Metro.Controls;
-using SS.ShareScreen.Core.InteractionManager;
-using SS.ShareScreen.Core.MVVM;
-using SS.ShareScreen.Core.Payload;
-using SS.ShareScreen.Enums;
-using SS.ShareScreen.Extensions;
-using SS.ShareScreen.InteractionProviders;
-using SS.ShareScreen.Interfaces.Controls;
-using SS.ShareScreen.Interfaces.Core;
-using SS.ShareScreen.Interfaces.InteractionManager;
-using SS.ShareScreen.Interfaces.Main;
-using SS.ShareScreen.Interfaces.System;
-using SS.ShareScreen.Logger;
-using SS.ShareScreen.Payloads;
+using ShareScreen.Core.Core.MVVM;
+using ShareScreen.Core.Core.Payload;
+using ShareScreen.Core.Enums;
+using ShareScreen.Core.Extensions;
+using ShareScreen.Core.InteractionProviders;
+using ShareScreen.Core.Interfaces.Core;
+using ShareScreen.Core.Interfaces.InteractionManager;
+using ShareScreen.Core.Interfaces.Main;
+using ShareScreen.Core.Interfaces.System;
+using ShareScreen.Core.Payloads;
 
 namespace SS.ShareScreen.ViewModels
 {
