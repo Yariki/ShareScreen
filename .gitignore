@@ -25,3 +25,7 @@ Samples/Samples/DrawOnScreen/bin/Debug/DrawOnScreen.vshost.exe
 /Source/ShareScreen/*.user
 
 /Source/packages
+/Source/ShareScreen.Controls/bin
+/Source/ShareScreen.Controls/obj
+/Source/ShareScreen.Core/bin
+/Source/ShareScreen.Core/obj

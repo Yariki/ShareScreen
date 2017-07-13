@@ -46,18 +46,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Adorners\SSResizeAdorner.cs" />
     <Compile Include="Controls\Adorners\SSSelectionAdorner.cs" />
     <Compile Include="Controls\Converters\SSBoolToVisibilityConverter.cs" />
     <Compile Include="Controls\Core\SSBaseCanvasElement.cs" />
     <Compile Include="Controls\Selectors\SSMenuItemTemplateSelector.cs" />
+    <Compile Include="Controls\SSDesignerItemDecorator.cs" />
+    <Compile Include="Controls\SSResizeChrome.cs" />
     <Compile Include="Controls\SSScreenShotCanvas.cs" />
     <Compile Include="Controls\SSSelectionCanvas.cs" />
     <Compile Include="Controls\Thumbs\SSDragThumb.cs" />
     <Compile Include="Controls\Thumbs\SSMoveThumb.cs" />
+    <Compile Include="Controls\Thumbs\SSResizeThumb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Helper.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

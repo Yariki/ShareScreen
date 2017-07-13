@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ShareScreen.Controls.Controls.Core
 {
@@ -51,7 +52,19 @@ namespace ShareScreen.Controls.Controls.Core
             get { return (bool) GetValue(IsSelectedProperty); }
             set { SetValue(IsSelectedProperty, value); }
         }
-        
+
+
+        public double GetAspect()
+        {
+            return this.GetAspect(false);
+        }
+
+        public virtual double GetAspect(bool bCheckShift)
+        {
+            if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift) || this.Height <= 0.0)
+                return -1.0;
+            return this.Width / this.Height;
+        }
 
     }
 }
