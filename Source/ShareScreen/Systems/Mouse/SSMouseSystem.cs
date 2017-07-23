@@ -54,6 +54,7 @@ namespace SS.ShareScreen.Systems.Mouse
 
         public override void StartSystem()
         {
+#if LOCAL_DEBUG
             _mouseHookThread = new Thread(() =>
             {
                 _mouseHookThreadId = (uint)SSWindowsFunctions.GetCurrentThreadId();
@@ -66,12 +67,14 @@ namespace SS.ShareScreen.Systems.Mouse
             });
             _mouseHookThread.IsBackground = true;
             _mouseHookThread.Start();
+#endif
             _selctionAreaToken = InteractionManager.GetCommand<SSSelectionRegionProvider>().Subscribe(OnSelectionArea);
         }
         
 
         public override void StopSystem()
         {
+#if LOCAL_DEBUG
             SSWindowsFunctions.UnhookWindowsHookEx(_hhook);
             if (_mouseHookThread != null)
             {
@@ -79,6 +82,7 @@ namespace SS.ShareScreen.Systems.Mouse
                 _mouseHookThread = null;
                 _mouseHookThreadId = 0;
             }
+#endif
             InteractionManager.GetCommand<SSSelectionRegionProvider>().Unsubscribe(_selctionAreaToken);
         }
 
@@ -114,7 +118,7 @@ namespace SS.ShareScreen.Systems.Mouse
 
         protected override int GetHookType() => SSWindowsFunctions.WH_MOUSE_LL;
 
-        #region [private]
+#region [private]
 
         private void OnSelectionArea(SSPayload<Tuple<bool, WindowsApplication.Point, WindowsApplication.Point>> ssPayload)
         {
@@ -203,7 +207,7 @@ namespace SS.ShareScreen.Systems.Mouse
         }
 
         
-        #endregion
+#endregion
 
 
     }

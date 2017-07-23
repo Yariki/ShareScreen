@@ -91,7 +91,7 @@ namespace ShareScreen.Controls.Controls.Thumbs
                                 num6 = 0.0;
                             if (aspect <= 0.0)
                             {
-                                this.CheckItemMinHeight(element, (double)this.CalcHeightGridSnap((int)(element.Height - num6),0));
+                                this.CheckItemMinHeight(element, element.Height);
                                 
                             }
                             this.CheckItemMinHeight(element, element.Height - num6);
@@ -124,17 +124,7 @@ namespace ShareScreen.Controls.Controls.Thumbs
                 return bottom;
             return verticalChange;
         }
-
-        private int CalcHeightGridSnap(int y, int gridsize)
-        {
-            return y / gridsize * gridsize;
-        }
-
-        private int CalcWidthGridSnap(int x, int gridsize)
-        {
-            return x / gridsize * gridsize;
-        }
-
+        
         private void CheckItemMinWidth(SSBaseCanvasElement item, double width)
         {
             if (width > item.MinWidth)

@@ -50,7 +50,10 @@ namespace ShareScreen.Controls.Controls.Core
         public bool IsSelected
         {
             get { return (bool) GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
+            set
+            {
+                SetValue(IsSelectedProperty, value);
+            }
         }
 
 
@@ -66,5 +69,11 @@ namespace ShareScreen.Controls.Controls.Core
             return this.Width / this.Height;
         }
 
+
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseDown(e);
+            IsSelected = true;
+        }
     }
 }

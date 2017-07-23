@@ -48,7 +48,12 @@
   <ItemGroup>
     <Compile Include="Controls\Adorners\SSResizeAdorner.cs" />
     <Compile Include="Controls\Adorners\SSSelectionAdorner.cs" />
+    <Compile Include="Controls\CanvasElements\SSSelectionControl.xaml.cs">
+      <DependentUpon>SSSelectionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Converters\SSBoolToVisibilityConverter.cs" />
+    <Compile Include="Controls\Converters\SSBrushColorConverter.cs" />
+    <Compile Include="Controls\Converters\SSDoubleToIntConverter.cs" />
     <Compile Include="Controls\Core\SSBaseCanvasElement.cs" />
     <Compile Include="Controls\Selectors\SSMenuItemTemplateSelector.cs" />
     <Compile Include="Controls\SSDesignerItemDecorator.cs" />
@@ -61,11 +66,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\Generic.xaml">
+    <Page Include="Controls\CanvasElements\SSSelectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\HelperResource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Helper.xaml">
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -76,5 +85,6 @@
       <Name>ShareScreen.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

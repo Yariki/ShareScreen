@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -71,9 +72,14 @@ namespace ShareScreen.Controls.Controls.Adorners
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
             if (adornerLayer.IsNotNull())
             {
+                var pt = _canvas.TranslatePoint(_start.Value, adornerLayer);
                 adornerLayer.Remove(this);
+                _canvas.AddSelection(pt,
+                    Math.Abs(_start.Value.X - _end.Value.X),
+                    Math.Abs(_start.Value.Y - _end.Value.Y));
+                _start = null;
+                _end = null;
             }
-            // TODO: add selection control to screenshot canvas.
             e.Handled = true;
         }
     }

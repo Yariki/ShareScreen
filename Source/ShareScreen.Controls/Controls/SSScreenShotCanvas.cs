@@ -1,10 +1,14 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using ShareScreen.Controls.Controls.Adorners;
+using ShareScreen.Controls.Controls.CanvasElements;
+using ShareScreen.Controls.Controls.Core;
 using ShareScreen.Core.Extensions;
 using Point =  System.Windows.Point;
 
@@ -52,6 +56,23 @@ namespace ShareScreen.Controls.Controls
             set { SetValue(ScreenShotProperty, value); }
         }
 
+        #region [public metrhods]
+
+
+        public void AddSelection(Point start, double width, double height)
+        {
+            
+            this.Children.Clear();
+            var ctrl = new SSSelectionControl() {Width = width, Height = height};
+            Canvas.SetLeft(ctrl,start.X);
+            Canvas.SetTop(ctrl,start.Y);
+
+            Children.Add(ctrl);
+        }
+
+        #endregion
+
+
 
         protected override void OnRender(DrawingContext dc)
         {
@@ -67,6 +88,7 @@ namespace ShareScreen.Controls.Controls
         {
             base.OnMouseDown(e);
             _start = new Point?(e.GetPosition((IInputElement) this));
+            DeselectAll();
             Focus();
         }
 
@@ -114,6 +136,15 @@ namespace ShareScreen.Controls.Controls
         {
             ((ScaleTransform) (LayoutTransform)).ScaleX = scale;
             ((ScaleTransform) (LayoutTransform)).ScaleY = scale;
+        }
+
+        private void DeselectAll()
+        {
+            if (!this.Children.OfType<SSBaseCanvasElement>().Any())
+            {
+                return;
+            }
+            this.Children.OfType<SSBaseCanvasElement>().ForEach(c => c.IsSelected = false);
         }
 
         #endregion

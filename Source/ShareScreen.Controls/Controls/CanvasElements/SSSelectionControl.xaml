@@ -1,0 +1,24 @@
+﻿<core:SSBaseCanvasElement x:Class="ShareScreen.Controls.Controls.CanvasElements.SSSelectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ShareScreen.Controls.Controls.CanvasElements"
+             xmlns:core="clr-namespace:ShareScreen.Controls.Controls.Core"
+                          Template="{DynamicResource  ResourceKey=BaseCanvasElement}"
+             
+             >
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Themes/HelperResource.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <DockPanel LastChildFill="true" IsHitTestVisible="false">
+        <Rectangle Stroke="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SSSelectionControl}}, Path=Stroke, Converter={StaticResource BrushColorConverter}}"
+                   Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SSSelectionControl}}, Path=Fill, Converter={StaticResource BrushColorConverter}}"
+                   StrokeThickness="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SSSelectionControl}}, Path=StrokeThickness, Converter={StaticResource DoubleToIntConverter}}"
+                   StrokeDashArray="4 4"
+                   />
+    </DockPanel>
+</core:SSBaseCanvasElement>
+

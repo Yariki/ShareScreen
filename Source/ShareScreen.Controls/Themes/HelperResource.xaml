@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:canvasElements="clr-namespace:ShareScreen.Controls.Controls.CanvasElements"
+                    xmlns:core="clr-namespace:ShareScreen.Controls.Controls.Core"
+                    xmlns:local="clr-namespace:ShareScreen.Controls.Controls"
+                    xmlns:converters="clr-namespace:ShareScreen.Controls.Controls.Converters"
+                    xmlns:thumbs="clr-namespace:ShareScreen.Controls.Controls.Thumbs"
+                    
+                    >
+
+    <converters:SSBrushColorConverter x:Key="BrushColorConverter"></converters:SSBrushColorConverter>
+    <converters:SSDoubleToIntConverter x:Key="DoubleToIntConverter"></converters:SSDoubleToIntConverter>
+
+    <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type thumbs:SSMoveThumb}">
+        <Rectangle Fill="Transparent"/>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="BaseCanvasElement" TargetType="{x:Type ContentControl}">
+        <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+            <local:SSDesignerItemDecorator x:Name="ItemDecorator"/>
+            <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
+            <thumbs:SSMoveThumb x:Name="PART_MoveThumb" Template="{StaticResource MoveThumbTemplate}" Margin="-5" Cursor="SizeAll"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}">
+                <Setter TargetName="ItemDecorator" Property="local:SSDesignerItemDecorator.ShowDecorator" Value="true"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+</ResourceDictionary>

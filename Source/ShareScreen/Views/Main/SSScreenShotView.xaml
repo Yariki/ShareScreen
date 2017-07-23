@@ -37,9 +37,12 @@
         </StackPanel>
         
         
-        <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
             <controls:SSScreenShotCanvas ScreenShot="{Binding ImageSource,UpdateSourceTrigger=PropertyChanged}" 
-                                         Scale="{Binding Scale,UpdateSourceTrigger=PropertyChanged}"></controls:SSScreenShotCanvas>
+                                         Scale="{Binding Scale,UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         ></controls:SSScreenShotCanvas>
         </ScrollViewer>
     </Grid>
 </UserControl>
