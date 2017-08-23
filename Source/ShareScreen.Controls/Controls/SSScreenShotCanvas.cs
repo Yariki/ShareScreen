@@ -6,11 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using ShareScreen.Controls.Controls.Adorners;
 using ShareScreen.Controls.Controls.CanvasElements;
 using ShareScreen.Controls.Controls.Core;
+using ShareScreen.Controls.EventArguments;
 using ShareScreen.Core.Extensions;
 using Point =  System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace ShareScreen.Controls.Controls
 {
@@ -25,6 +28,7 @@ namespace ShareScreen.Controls.Controls
             LayoutTransform = new ScaleTransform();
         }
 
+        #region [dependency properties]
 
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
             "Scale", typeof(double), typeof(SSScreenShotCanvas), new PropertyMetadata(1.0,ScaleChanged));
@@ -42,38 +46,57 @@ namespace ShareScreen.Controls.Controls
 
 
         public static readonly DependencyProperty ScreenShotProperty = DependencyProperty.Register(
-            "ScreenShot", typeof(ImageSource), typeof(SSScreenShotCanvas), new PropertyMetadata(default(Bitmap),ScreenShotChanged));
+            "ScreenShot", typeof(BitmapSource), typeof(SSScreenShotCanvas), new PropertyMetadata(default(Bitmap),ScreenShotChanged));
 
         private static void ScreenShotChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            ((SSScreenShotCanvas)dependencyObject).OnScreenShotChanged(dependencyPropertyChangedEventArgs.NewValue as ImageSource);
+            ((SSScreenShotCanvas)dependencyObject).OnScreenShotChanged(dependencyPropertyChangedEventArgs.NewValue as BitmapSource);
         }
         
 
-        public ImageSource ScreenShot
+        public BitmapSource ScreenShot
         {
-            get { return (ImageSource) GetValue(ScreenShotProperty); }
+            get { return (BitmapSource) GetValue(ScreenShotProperty); }
             set { SetValue(ScreenShotProperty, value); }
         }
 
-        #region [public metrhods]
+        public static readonly DependencyProperty CurrentSelectionProperty = DependencyProperty.Register(
+            "CurrentSelection", typeof(Rect), typeof(SSScreenShotCanvas), new PropertyMetadata(default(Rect)));
+
+        public Rect CurrentSelection
+        {
+            get { return (Rect) GetValue(CurrentSelectionProperty); }
+            set { SetValue(CurrentSelectionProperty, value); }
+        }
+        
+        #endregion
+        
+        #region [public methods]
 
 
         public void AddSelection(Point start, double width, double height)
         {
-            
+            this.Children.OfType<SSSelectionControl>().ForEach(sel =>
+            {
+                sel.PositionChanged -= CtrlOnPositionChanged;
+                sel.SelectionSizeChanged -= CtrlOnSelectionSizeChanged;
+            });
             this.Children.Clear();
+
             var ctrl = new SSSelectionControl() {Width = width, Height = height};
+            CurrentSelection = new Rect(start, new Size(width,height));
             Canvas.SetLeft(ctrl,start.X);
             Canvas.SetTop(ctrl,start.Y);
-
             Children.Add(ctrl);
+
+            ctrl.PositionChanged += CtrlOnPositionChanged;
+            ctrl.SelectionSizeChanged += CtrlOnSelectionSizeChanged;
         }
 
+        
+
         #endregion
-
-
-
+        
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
@@ -81,6 +104,7 @@ namespace ShareScreen.Controls.Controls
             {
                 dc.DrawImage(ScreenShot,new Rect(new System.Windows.Point(0,0), new System.Windows.Size((int)this.Width,(int)this.Height)));
             }
+            
         }
 
 
@@ -123,7 +147,7 @@ namespace ShareScreen.Controls.Controls
 
         #region [private]
 
-        private void OnScreenShotChanged(ImageSource newValue)
+        private void OnScreenShotChanged(BitmapSource newValue)
         {
             if (newValue.IsNotNull())
             {
@@ -145,7 +169,28 @@ namespace ShareScreen.Controls.Controls
                 return;
             }
             this.Children.OfType<SSBaseCanvasElement>().ForEach(c => c.IsSelected = false);
+            CurrentSelection = Rect.Empty;
         }
+
+        private void CtrlOnPositionChanged(object sender, SSSelectionPositionChangedArgs ssSelectionPositionChangedArgs)
+        {
+            ProcessNewSelection(sender);
+        }
+
+        private void CtrlOnSelectionSizeChanged(object sender, SSSelectionSizeChangedArgs ssSelectionSizeChangedArgs)
+        {
+            ProcessNewSelection(sender);
+        }
+
+        private void ProcessNewSelection(object sender)
+        {
+            var left = Canvas.GetLeft((UIElement)sender);
+            var top = Canvas.GetTop((UIElement)sender);
+            var width = ((FrameworkElement)sender).ActualWidth;
+            var height = ((FrameworkElement)sender).ActualHeight;
+            CurrentSelection = new Rect(new Point(left, top), new Size(width, height));
+        }
+
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,8 +45,22 @@ namespace ShareScreen.Controls.Controls.Core
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #region [dependencyu properties]
+        
+
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
-            "IsSelected", typeof(bool), typeof(SSBaseCanvasElement), new PropertyMetadata(default(bool)));
+            "IsSelected", typeof(bool), typeof(SSBaseCanvasElement), new PropertyMetadata(default(bool),IsSelectedChanged));
+
+        private static void IsSelectedChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var canvasElement = dependencyObject as SSBaseCanvasElement;
+            canvasElement.IsSelectedChanged((bool)dependencyPropertyChangedEventArgs.OldValue,(bool)dependencyPropertyChangedEventArgs.NewValue);
+        }
+
+        protected virtual void IsSelectedChanged(bool oldValue, bool newValue)
+        {
+
+        }
 
         public bool IsSelected
         {
@@ -55,6 +70,9 @@ namespace ShareScreen.Controls.Controls.Core
                 SetValue(IsSelectedProperty, value);
             }
         }
+
+        #endregion
+
 
 
         public double GetAspect()

@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using ShareScreen.Controls.Controls.Adorners;
+using ShareScreen.Controls.EventArguments;
+using ShareScreen.Core.Extensions;
 
 namespace ShareScreen.Controls.Controls
 {
@@ -28,6 +31,8 @@ namespace ShareScreen.Controls.Controls
             this.Unloaded += new RoutedEventHandler(this.DesignerItemDecorator_Unloaded);
         }
 
+        public event EventHandler<SSSelectionSizeChangedArgs> SelectionSizeChanged; 
+
         private void HideAdorner()
         {
             if (this.adorner == null)
@@ -45,6 +50,7 @@ namespace ShareScreen.Controls.Controls
                 ContentControl dataContext = this.DataContext as ContentControl;
                 VisualTreeHelper.GetParent((DependencyObject)dataContext);
                 this.adorner = (Adorner)new SSResizeAdorner(dataContext);
+                this.adorner.SizeChanged += AdornerOnSizeChanged;
                 adornerLayer.Add(this.adorner);
                 if (this.ShowDecorator)
                     this.adorner.Visibility = Visibility.Visible;
@@ -55,6 +61,15 @@ namespace ShareScreen.Controls.Controls
                 this.adorner.Visibility = Visibility.Visible;
         }
 
+        private void AdornerOnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
+        {
+            var temp = SelectionSizeChanged;
+            if (temp.IsNotNull())
+            {
+                temp(this,new SSSelectionSizeChangedArgs(sizeChangedEventArgs.NewSize.Width,sizeChangedEventArgs.NewSize.Height));
+            }
+        }
+
         private void DesignerItemDecorator_Unloaded(object sender, RoutedEventArgs e)
         {
             if (this.adorner == null)
@@ -62,6 +77,7 @@ namespace ShareScreen.Controls.Controls
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer((Visual)this);
             if (adornerLayer != null)
                 adornerLayer.Remove(this.adorner);
+            this.adorner.SizeChanged -= AdornerOnSizeChanged;
             this.adorner = (Adorner)null;
         }
 

@@ -63,6 +63,8 @@
     <Compile Include="Controls\Thumbs\SSDragThumb.cs" />
     <Compile Include="Controls\Thumbs\SSMoveThumb.cs" />
     <Compile Include="Controls\Thumbs\SSResizeThumb.cs" />
+    <Compile Include="EventArguments\SSSelectionPositionChangedArgs.cs" />
+    <Compile Include="EventArguments\SSSelectionSizeChangedArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -40,6 +40,7 @@
         <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
             <controls:SSScreenShotCanvas ScreenShot="{Binding ImageSource,UpdateSourceTrigger=PropertyChanged}" 
                                          Scale="{Binding Scale,UpdateSourceTrigger=PropertyChanged}"
+                                         CurrentSelection="{Binding CurrentSelection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                          HorizontalAlignment="Left"
                                          VerticalAlignment="Top"
                                          ></controls:SSScreenShotCanvas>

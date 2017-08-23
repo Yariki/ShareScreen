@@ -54,8 +54,8 @@ namespace SS.ShareScreen.ViewModels
             if (disposing)
             {
                 MenuViewModel?.Dispose();
-                KeyboardSystem?.StopSystem();
-                MouseSystem?.StopSystem();
+                //KeyboardSystem?.StopSystem();
+                //MouseSystem?.StopSystem();
                 InteractionManager.GetCommand<SSNormalizeMainWindowProvider>().Unsubscribe(_normalizeToken);
                 InteractionManager.GetCommand<SSSelectedWindowProvider>().Unsubscribe(_selectionWindowToken);
                 InteractionManager.GetCommand<SSSelectionRegionFinished>().Unsubscribe(_selectionAreaToken);
@@ -74,8 +74,8 @@ namespace SS.ShareScreen.ViewModels
         public override void Initialize(ISSUIViewModel parentModel)
         {
             MenuViewModel?.InitializeMenu(ExecuteMenuCommand, CanExecuteManuCommand);
-            KeyboardSystem?.StartSystem();
-            MouseSystem?.StartSystem();
+            //KeyboardSystem?.StartSystem();
+            //MouseSystem?.StartSystem();
             //PluginSystem?.StartSystem();
             ScreenShotSystem?.StartSystem();
             ScreenShots = new ObservableCollection<ISSScreenShotViewModel>();

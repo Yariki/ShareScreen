@@ -70,7 +70,7 @@ namespace SS.ShareScreen.ViewModels
 
         public void SaveAs()
         {
-            var dialog =new System.Windows.Forms.SaveFileDialog();
+            var dialog = new System.Windows.Forms.SaveFileDialog();
             dialog.DefaultExt = "*.png";
             dialog.Filter = FILTER;
             if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.FileName))
@@ -102,7 +102,7 @@ namespace SS.ShareScreen.ViewModels
         public bool IsSaved
         {
             get { return Get(() => IsSaved); }
-            private set { Set(() => IsSaved,value); }
+            private set { Set(() => IsSaved, value); }
         }
 
         public void SetScreenShot(Bitmap screenShot)
@@ -116,21 +116,31 @@ namespace SS.ShareScreen.ViewModels
         public Bitmap ScreenShot
         {
             get { return Get(() => ScreenShot); }
-            private set { Set(() => ScreenShot, value);}
+            private set { Set(() => ScreenShot, value); }
         }
 
-        public ImageSource ImageSource
+        public BitmapSource ImageSource
         {
             set { Set(() => ImageSource, value); }
             private get { return Get(() => ImageSource); }
         }
-        
+
+        public Rect CurrentSelection
+        {
+            get { return Get(() => CurrentSelection);}
+            set
+            {
+                Set(() => CurrentSelection,value);
+                System.Diagnostics.Debug.WriteLine($"Ccurrent Selection: {value}");
+            }
+        }
+
 
         ///
         /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
         }
-        
+
     }//end SSScreenShotViewModel
 }//end namespace ViewModels
